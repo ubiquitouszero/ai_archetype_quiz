@@ -1,0 +1,100 @@
+{
+  "Pioneer": {
+    "description": "Eager adopter who sees AI as adventure and advantage",
+    "characteristics": [
+      "First to test new AI tools",
+      "Vocal about wins and discoveries", 
+      "Driven by curiosity and improvement",
+      "Comfortable with experimentation"
+    ],
+    "approach": "Give early access to new tools, spotlight their successes",
+    "risk": "May experience burnout or cut corners in excitement",
+    "fight_or_flight": "Fight - drives momentum for change",
+    "color": "#FF6B35",
+    "icon": "🚀"
+  },
+  "Analyst": {
+    "description": "Wants evidence, ROI, and a plan before acting",
+    "characteristics": [
+      "Asks for data and metrics",
+      "Cautious about adoption",
+      "Proof and predictability focused",
+      "Values structured implementation"
+    ],
+    "approach": "Provide evidence, run pilots, share KPIs",
+    "risk": "Analysis paralysis can delay beneficial changes",
+    "fight_or_flight": "Will support if convinced; can slow or steer change",
+    "color": "#4ECDC4",
+    "icon": "📊"
+  },
+  "Worrier": {
+    "description": "Feels threatened or uncertain about AI's impact on their role",
+    "characteristics": [
+      "Quietly anxious about changes",
+      "Asks about job security",
+      "Security and belonging focused",
+      "Needs reassurance and support"
+    ],
+    "approach": "Offer reassurance, clear upskilling paths, emotional support",
+    "risk": "Quiet quitting or turnover if not supported",
+    "fight_or_flight": "May freeze or flight if not supported",
+    "color": "#FFE66D",
+    "icon": "😰"
+  },
+  "Guardian": {
+    "description": "Prioritizes caution, ethics, and minimizing risk or harm",
+    "characteristics": [
+      "Raises red flags about risks",
+      "Checks compliance and ethics",
+      "Reputation and safety conscious",
+      "Values careful implementation"
+    ],
+    "approach": "Involve in risk assessment and policy creation",
+    "risk": "Can block beneficial changes entirely",
+    "fight_or_flight": "Will fight for ethical safeguards",
+    "color": "#A8E6CF",
+    "icon": "🛡️"
+  },
+  "Traditionalist": {
+    "description": "Prefers the old way—sees AI as unnecessary or overhyped",
+    "characteristics": [
+      "Dismisses new tools and methods",
+      "Driven by nostalgia and familiarity",
+      "Values consistency and proven approaches",
+      "Skeptical of change initiatives"
+    ],
+    "approach": "Show small, relevant wins that connect to current work",
+    "risk": "Missing opportunities, forced adaptation later",
+    "fight_or_flight": "May flight (withdraw) or resist change",
+    "color": "#B4A7D6",
+    "icon": "📚"
+  },
+  "Opportunist": {
+    "description": "Sees AI as a way to leap ahead, disrupt, or win",
+    "characteristics": [
+      "Ready to go, high energy",
+      "Comfortable with risk-taking",
+      "Winning and disruption focused",
+      "Pushes for aggressive adoption"
+    ],
+    "approach": "Channel energy productively, guide responsibly",
+    "risk": "Overreach, reckless implementation",
+    "fight_or_flight": "Will fight to be first and win",
+    "color": "#FF8B94",
+    "icon": "⚡"
+  },
+  "Humanitarian": {
+    "description": "Focuses on equity, fairness, and team wellbeing",
+    "characteristics": [
+      "Asks about impact on people",
+      "Culture and inclusion focused",
+      "Fairness and equity driven",
+      "Considers team dynamics"
+    ],
+    "approach": "Involve in culture and change management process",
+    "risk": "May disengage if voices aren't heard",
+    "fight_or_flight": "Will fight for inclusion and equity",
+    "color": "#95E1D3",
+    "icon": "🤝"
+  }
+}
