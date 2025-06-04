@@ -1,0 +1,143 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "question": "Your company launches an 'AI Champions' program. You:",
+      "answers": {
+        "A": "Nominate yourself immediately.",
+        "B": "Ask how 'champion' success will be measured.",
+        "C": "Feel anxious—does this mean my job is at risk?",
+        "D": "Worry about the ethics of moving too fast.",
+        "E": "Think, 'These things never last.'",
+        "F": "See a chance to make a name for yourself.",
+        "G": "Ask how it will affect support staff and junior employees."
+      }
+    },
+    {
+      "id": 2,
+      "question": "A colleague uses AI to finish a project in half the time. Your reaction?",
+      "answers": {
+        "A": "Ask them to show you how!",
+        "B": "Wonder if the output quality was measured.",
+        "C": "Secretly worry you can't keep up.",
+        "D": "Raise questions about data privacy.",
+        "E": "Feel skeptical about relying on a tool.",
+        "F": "Brainstorm how to automate even more.",
+        "G": "Check if anyone was left out or missed a chance to learn."
+      }
+    },
+    {
+      "id": 3,
+      "question": "How do you keep up with AI trends?",
+      "answers": {
+        "A": "Subscribe to newsletters/podcasts, experiment often.",
+        "B": "Wait for official company updates or reports.",
+        "C": "Read headlines but feel overwhelmed.",
+        "D": "Follow AI ethics forums or regulatory news.",
+        "E": "Trust your usual industry publications.",
+        "F": "Attend 'future of work' events and hackathons.",
+        "G": "Watch for stories on AI's social impact."
+      }
+    },
+    {
+      "id": 4,
+      "question": "Your leadership says AI will require 'reskilling.' You:",
+      "answers": {
+        "A": "Look up training courses right away.",
+        "B": "Want a timeline, metrics, and job guarantees.",
+        "C": "Worry you'll be left behind.",
+        "D": "Want to ensure training is voluntary and fair.",
+        "E": "Assume it's a passing phase.",
+        "F": "Suggest creating new roles for AI strategists.",
+        "G": "Volunteer to mentor those most at risk."
+      }
+    },
+    {
+      "id": 5,
+      "question": "What's your biggest question about AI?",
+      "answers": {
+        "A": "'How can I use it to work smarter?'",
+        "B": "'How will we measure its success?'",
+        "C": "'Will it replace my job?'",
+        "D": "'What are the risks for us?'",
+        "E": "'Is this just another management fad?'",
+        "F": "'How can it help us beat competitors?'",
+        "G": "'Who might be left behind?'"
+      }
+    },
+    {
+      "id": 6,
+      "question": "You're assigned to an AI implementation team. What's your role?",
+      "answers": {
+        "A": "Early adopter, hands-on tester.",
+        "B": "Project manager, tracking results.",
+        "C": "Quiet observer, taking it all in.",
+        "D": "Policy checker, flagging concerns.",
+        "E": "Reluctant participant.",
+        "F": "Idea generator, pushing for more change.",
+        "G": "Team advocate, focusing on inclusion."
+      }
+    },
+    {
+      "id": 7,
+      "question": "How do you feel about 'AI replacing jobs?'",
+      "answers": {
+        "A": "It's a chance to move up or into new areas.",
+        "B": "Only acceptable if it clearly benefits the business.",
+        "C": "Anxious and uncertain.",
+        "D": "It should be tightly controlled and monitored.",
+        "E": "Unlikely—these changes are always overstated.",
+        "F": "Opportunity to reinvent our organization.",
+        "G": "Worrisome unless everyone is supported."
+      }
+    },
+    {
+      "id": 8,
+      "question": "When a new AI policy is announced, you:",
+      "answers": {
+        "A": "Read it and look for ways to leverage it.",
+        "B": "Study the details and ask for clarification.",
+        "C": "Wait to see how it impacts you.",
+        "D": "Check for privacy or bias safeguards.",
+        "E": "Hope it doesn't change daily routines.",
+        "F": "Argue for faster rollout.",
+        "G": "Survey coworkers about their comfort level."
+      }
+    },
+    {
+      "id": 9,
+      "question": "Your team faces a tight deadline. What's your approach?",
+      "answers": {
+        "A": "Use every tool, including AI, to get results.",
+        "B": "Weigh risks vs. benefits before changing workflow.",
+        "C": "Prefer to stick with what you know works.",
+        "D": "Only use tools that have been vetted for fairness/ethics.",
+        "E": "Avoid new tools under pressure.",
+        "F": "Suggest splitting the work—humans + AI for speed.",
+        "G": "Make sure no one gets left out under stress."
+      }
+    },
+    {
+      "id": 10,
+      "question": "What's your ideal relationship with AI at work?",
+      "answers": {
+        "A": "Collaborator—side by side, learning and growing.",
+        "B": "Consultant—advice only, with final say by people.",
+        "C": "Support—only as needed, never front and center.",
+        "D": "Watchdog—monitor, question, and keep it in check.",
+        "E": "Minimal—keep AI out of the core.",
+        "F": "Accelerator—push the boundaries and redefine work.",
+        "G": "Equalizer—help level the playing field for all."
+      }
+    }
+  ],
+  "mapping": {
+    "A": "Pioneer",
+    "B": "Analyst", 
+    "C": "Worrier",
+    "D": "Guardian",
+    "E": "Traditionalist",
+    "F": "Opportunist",
+    "G": "Humanitarian"
+  }
+}
