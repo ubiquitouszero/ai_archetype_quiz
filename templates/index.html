@@ -1,1 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>AI Archetype Quiz</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div id="notification" class="notification"></div>
+    <div id="error-message" class="error-message"></div>
+    <div id="loading-overlay" class="loading-overlay" style="display:none;">
+        <div class="loading-text">Loading...</div>
+    </div>
 
+    <div id="landing-page" class="page page--active">
+        <h1>AI Archetype Quiz</h1>
+        <p>Discover how you approach AI in the workplace.</p>
+        <button id="start-quiz-btn">Start Quiz</button>
+        <button id="admin-nav-btn">Admin Login</button>
+    </div>
+
+    <div id="quiz-page" class="page">
+        <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+        <p>Question <span id="current-question"></span> of <span id="total-questions"></span></p>
+        <div id="question-text" class="question-text"></div>
+        <div id="answer-options" class="answers"></div>
+        <div class="nav-buttons">
+            <button id="prev-btn">Previous</button>
+            <button id="next-btn" disabled>Next</button>
+        </div>
+    </div>
+
+    <div id="results-page" class="page">
+        <h2>Your AI Archetype: <span id="primary-archetype-name"></span></h2>
+        <p id="primary-archetype-score"></p>
+        <p id="primary-archetype-description"></p>
+        <p id="primary-archetype-approach"></p>
+        <ul id="primary-archetype-characteristics"></ul>
+        <h3>Score Breakdown</h3>
+        <div id="score-breakdown" class="score-breakdown"></div>
+        <div class="nav-buttons">
+            <button id="retake-quiz-btn">Retake Quiz</button>
+            <button id="view-summary-btn">View Summary</button>
+            <button id="share-results-btn" style="display:none;">Share</button>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

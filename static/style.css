@@ -1,1 +1,17 @@
-
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f5f5f5;
+}
+.page { display: none; padding: 20px; }
+.page--active { display: block; }
+.progress-bar { width: 100%; background: #ddd; height: 8px; margin-bottom: 20px; }
+.progress-fill { background: #4ECDC4; height: 8px; width: 0%; }
+.answer-option { border: 1px solid #ccc; padding: 10px; margin-bottom: 8px; cursor: pointer; }
+.answer-option--selected { background: #4ECDC4; color: #fff; }
+.nav-buttons { margin-top: 20px; }
+.nav-buttons button { margin-right: 10px; }
+.notification { position: fixed; top: 10px; right: 10px; background: #4ECDC4; color: #fff; padding: 10px; border-radius: 4px; display:none; }
+.notification.show { display:block; }
+.loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); display:flex; align-items:center; justify-content:center; }
