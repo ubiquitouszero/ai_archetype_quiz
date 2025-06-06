@@ -16,6 +16,7 @@ from pydantic import BaseModel
 # Pydantic models
 class QuizResponse(BaseModel):
     responses: Dict[str, str]
+    completion_time: Optional[float] = None
 
 class QuizResult(BaseModel):
     session_id: str
@@ -162,19 +163,21 @@ async def submit_quiz(request: Request, quiz_data: QuizResponse):
         user_agent = request.headers.get("user-agent", "")
         ip_address = request.client.host if request.client else ""
         referrer = request.headers.get("referer", "")
+        completion_time = quiz_data.completion_time
         
         # Save to database
         conn = get_db_connection()
         try:
             conn.execute('''
-                INSERT INTO submissions 
-                (session_id, responses, primary_archetype, scores, user_agent, ip_address, referrer)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO submissions
+                (session_id, responses, primary_archetype, scores, completion_time, user_agent, ip_address, referrer)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
                 session_id,
                 json.dumps(quiz_data.responses),
                 primary_archetype,
                 json.dumps(scores),
+                completion_time,
                 user_agent,
                 ip_address,
                 referrer
