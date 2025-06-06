@@ -1,1 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    <p>Logged in as {{ user['email'] }}</p>
+    <p><a href="/admin/logout">Logout</a></p>
 
+    <h2>Overview</h2>
+    <ul>
+        <li>Total submissions: <span id="total-submissions"></span></li>
+        <li>Average completion time: <span id="average-time"></span></li>
+        <li>Most common archetype: <span id="most-common-type"></span></li>
+    </ul>
+
+    <div id="archetype-chart" class="chart"></div>
+
+    <h3>Recent Submissions</h3>
+    <div id="recent-submissions-list" class="table"></div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

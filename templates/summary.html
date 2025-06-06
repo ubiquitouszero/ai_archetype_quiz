@@ -1,1 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Quiz Summary</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Quiz Summary</h1>
+    <p>Total submissions: {{ total_submissions }}</p>
+    <p>Submissions in last 7 days: {{ recent_count }}</p>
 
+    <table>
+        <thead>
+            <tr><th>Archetype</th><th>Count</th><th>Percentage</th></tr>
+        </thead>
+        <tbody>
+        {% for stat in stats %}
+            <tr>
+                <td>{{ stat.archetype }}</td>
+                <td>{{ stat.count }}</td>
+                <td>{{ stat.percentage }}%</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <p><a href="/">Back to quiz</a></p>
+</body>
+</html>

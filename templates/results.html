@@ -1,1 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Quiz Results</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Your AI Archetype Results</h1>
+    <h2>{{ primary_archetype }}</h2>
+    <p>{{ archetype_data.description }}</p>
+    <p>{{ archetype_data.approach }}</p>
+    <ul>
+    {% for char in archetype_data.characteristics %}
+        <li>{{ char }}</li>
+    {% endfor %}
+    </ul>
 
+    <h3>Score Breakdown</h3>
+    <ul>
+    {% for archetype, score in scores.items() %}
+        <li>{{ archetype }}: {{ score }}%</li>
+    {% endfor %}
+    </ul>
+    <p>Completed at: {{ completed_at }}</p>
+    <p><a href="/">Take the quiz again</a></p>
+    <script src="/static/app.js"></script>
+</body>
+</html>
