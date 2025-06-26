@@ -258,7 +258,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For questions, issues, or podcast collaboration:
 
-- **Issues**: [GitHub Issues](https://github.com/ubiquitouszero/ai-archetype-quiz/issues)
+- **Issues**: [bert@acceleratinghumans.com](mailto:bert@acceleratinghumans.com)
 - **Podcast**: [Accelerating Humans](https://acceleratinghumans.com)
 - **Analytics**: Check `/summary` for real-time statistics
 
