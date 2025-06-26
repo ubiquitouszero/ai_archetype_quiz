@@ -1,1 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - AI Archetype Quiz</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--color-border);
+        }
+        
+        .admin-user {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .admin-user img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: var(--color-surface);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-card-border);
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            margin: 0 0 0.5rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+        
+        .charts-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .chart-card {
+            background: var(--color-surface);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-card-border);
+        }
+        
+        .chart-card h3 {
+            margin: 0 0 1rem 0;
+            color: var(--color-text);
+        }
+        
+        #archetype-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .chart-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .chart-bar__label {
+            min-width: 120px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .chart-bar__icon {
+            font-size: 1.2rem;
+        }
+        
+        .chart-bar__value {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .chart-bar__fill {
+            height: 8px;
+            background: var(--color-primary);
+            border-radius: 4px;
+            min-width: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .chart-bar__percentage {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            min-width: 35px;
+        }
+        
+        .submissions-section {
+            background: var(--color-surface);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-card-border);
+        }
+        
+        .submissions-section h3 {
+            margin: 0 0 1rem 0;
+        }
+        
+        .table-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr 100px 80px;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            border-bottom: 2px solid var(--color-border);
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+        
+        .table-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 100px 80px;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--color-border);
+            align-items: center;
+            font-size: 0.875rem;
+        }
+        
+        .table-row:hover {
+            background: var(--color-secondary);
+        }
+        
+        .archetype-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .view-link {
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .view-link:hover {
+            text-decoration: underline;
+        }
+        
+        .refresh-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--color-success);
+            border-radius: 50%;
+            margin-left: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--color-text-secondary);
+        }
+        
+        .error {
+            background: rgba(var(--color-error-rgb), 0.1);
+            border: 1px solid rgba(var(--color-error-rgb), 0.2);
+            color: var(--color-error);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            margin: 1rem 0;
+        }
+        
+        @media (max-width: 768px) {
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .table-header, .table-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5rem;
+            }
+            
+            .table-header div:nth-child(3),
+            .table-header div:nth-child(4),
+            .table-row div:nth-child(3),
+            .table-row div:nth-child(4) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="container flex justify-between items-center">
+            <h1 class="nav__brand">AI Archetype Quiz - Admin</h1>
+            <div class="nav__links">
+                <a href="/" class="btn btn--outline btn--sm">Back to Quiz</a>
+                <a href="/admin/logout" class="btn btn--outline btn--sm">Logout</a>
+            </div>
+        </div>
+    </nav>
 
+    <div class="admin-container">
+        <header class="admin-header">
+            <div>
+                <h1>Dashboard</h1>
+                <p>Real-time analytics and quiz management</p>
+            </div>
+            <div class="admin-user">
+                {% if user.picture %}
+                <img src="{{ user.picture }}" alt="{{ user.name }}">
+                {% endif %}
+                <div>
+                    <div class="font-weight-medium">{{ user.name }}</div>
+                    <div class="font-size-sm color-text-secondary">{{ user.email }}</div>
+                </div>
+                <span class="refresh-indicator" title="Auto-refreshing every 30s"></span>
+            </div>
+        </header>
+
+        <!-- Stats Overview -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Submissions</h3>
+                <div class="stat-number" id="total-submissions">Loading...</div>
+            </div>
+            <div class="stat-card">
+                <h3>Completion Rate</h3>
+                <div class="stat-number" id="completion-rate">Loading...</div>
+            </div>
+            <div class="stat-card">
+                <h3>Average Time</h3>
+                <div class="stat-number" id="average-time">Loading...</div>
+            </div>
+            <div class="stat-card">
+                <h3>Most Common</h3>
+                <div class="stat-number" id="most-common-type">Loading...</div>
+            </div>
+        </section>
+
+        <!-- Charts -->
+        <section class="charts-section">
+            <div class="chart-card">
+                <h3>Archetype Distribution</h3>
+                <div id="archetype-chart" class="loading">Loading chart data...</div>
+            </div>
+            <div class="chart-card">
+                <h3>Daily Activity</h3>
+                <div id="activity-chart">
+                    <p style="text-align: center; color: var(--color-text-secondary); padding: 2rem;">
+                        📈 Activity trends visualization<br>
+                        <small>Coming in v2</small>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Submissions -->
+        <section class="submissions-section">
+            <h3>Recent Submissions</h3>
+            <div class="table-header">
+                <div>Timestamp</div>
+                <div>Archetype</div>
+                <div>Duration</div>
+                <div>Actions</div>
+            </div>
+            <div id="recent-submissions-list" class="loading">Loading recent submissions...</div>
+        </section>
+    </div>
+
+    <!-- Error Display -->
+    <div id="error-message" class="error" style="display: none;"></div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

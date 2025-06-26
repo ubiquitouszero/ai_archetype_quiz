@@ -1,1 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Archetype Distribution - Live Results</title>
+    <link rel="stylesheet" href="/static/style.css">
+    
+    <meta name="description" content="See how organizations approach AI in the workplace. Live results from {{ total_submissions }} quiz responses showing AI archetype distribution.">
+    <meta property="og:title" content="AI Archetype Distribution - Live Results">
+    <meta property="og:description" content="See how {{ total_submissions }} people approach AI at work across 7 different archetypes.">
+    <meta property="og:type" content="website">
+</head>
+<body>
+    <nav class="nav">
+        <div class="container flex justify-between items-center">
+            <h1 class="nav__brand">AI Archetype Quiz</h1>
+            <div class="nav__links">
+                <a href="/" class="btn btn--primary btn--sm">Take Quiz</a>
+            </div>
+        </div>
+    </nav>
 
+    <div class="container">
+        <div class="summary-container">
+            <!-- Header -->
+            <div class="summary-header">
+                <h1>How Organizations Approach AI</h1>
+                <p class="summary-subtitle">
+                    Live results from <strong>{{ total_submissions }}</strong> quiz responses
+                    {% if recent_count > 0 %}
+                    • <span class="recent-activity">{{ recent_count }} responses in the last 7 days</span>
+                    {% endif %}
+                </p>
+                <div class="last-updated">
+                    Last updated: <span id="last-updated-time">Just now</span>
+                </div>
+            </div>
+
+            <!-- Key Insights -->
+            <div class="insights-section">
+                <h2>Key Insights</h2>
+                <div class="insights-grid">
+                    {% if stats %}
+                    <div class="insight-card">
+                        <div class="insight-card__icon">🏆</div>
+                        <div class="insight-card__content">
+                            <h3>Most Common Archetype</h3>
+                            <p><strong>{{ stats[0].archetype }}</strong> leads with {{ stats[0].percentage }}% of responses</p>
+                        </div>
+                    </div>
+                    {% if stats|length > 1 %}
+                    <div class="insight-card">
+                        <div class="insight-card__icon">⚖️</div>
+                        <div class="insight-card__content">
+                            <h3>Balanced Distribution</h3>
+                            <p>Top 3 archetypes account for {{ (stats[0].percentage + stats[1].percentage + (stats[2].percentage if stats|length > 2 else 0)) }}% of responses</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endif %}
+                    <div class="insight-card">
+                        <div class="insight-card__icon">📊</div>
+                        <div class="insight-card__content">
+                            <h3>Data-Driven</h3>
+                            <p>Based on real responses from professionals across industries</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Archetype Distribution -->
+            <div class="distribution-section">
+                <h2>Archetype Distribution</h2>
+                <div class="distribution-chart">
+                    {% for stat in stats %}
+                    <div class="distribution-item">
+                        <div class="distribution-item__header">
+                            <div class="distribution-item__info">
+                                <span class="distribution-item__icon">{{ stat.data.icon if stat.data else '📊' }}</span>
+                                <div>
+                                    <h3 class="distribution-item__name">{{ stat.archetype }}</h3>
+                                    <p class="distribution-item__desc">{{ stat.data.description if stat.data else 'AI workplace archetype' }}</p>
+                                </div>
+                            </div>
+                            <div class="distribution-item__stats">
+                                <div class="distribution-item__percentage">{{ stat.percentage }}%</div>
+                                <div class="distribution-item__count">{{ stat.count }} responses</div>
+                            </div>
+                        </div>
+                        <div class="distribution-item__bar">
+                            <div class="distribution-item__fill" 
+                                 style="width: {{ stat.percentage }}%; background-color: {{ stat.data.color if stat.data else '#4ECDC4' }};">
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Archetype Details -->
+            <div class="archetypes-section">
+                <h2>Understanding the Archetypes</h2>
+                <div class="archetypes-grid">
+                    {% for name, data in archetypes.items() %}
+                    <div class="archetype-card" style="border-left: 4px solid {{ data.color }}">
+                        <div class="archetype-card__header">
+                            <span class="archetype-card__icon">{{ data.icon }}</span>
+                            <h3>{{ name }}</h3>
+                        </div>
+                        <p class="archetype-card__description">{{ data.description }}</p>
+                        <div class="archetype-card__details">
+                            <div class="archetype-detail">
+                                <strong>Approach:</strong>
+                                <p>{{ data.approach }}</p>
+                            </div>
+                            {% if data.fight_or_flight %}
+                            <div class="archetype-detail">
+                                <strong>Change Response:</strong>
+                                <p>{{ data.fight_or_flight }}</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% set archetype_stat = stats | selectattr('archetype', 'equalto', name) | first %}
+                        {% if archetype_stat %}
+                        <div class="archetype-card__stat">
+                            {{ archetype_stat.percentage }}% of responses ({{ archetype_stat.count }} people)
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Call to Action -->
+            <div class="cta-section">
+                <h2>Discover Your Archetype</h2>
+                <p>Join {{ total_submissions }} professionals who have discovered their AI workplace style.</p>
+                <div class="cta-content">
+                    <div class="cta-features">
+                        <div class="cta-feature">
+                            <span class="cta-feature__icon">⚡</span>
+                            <span>3-5 minute assessment</span>
+                        </div>
+                        <div class="cta-feature">
+                            <span class="cta-feature__icon">🎯</span>
+                            <span>Personalized insights</span>
+                        </div>
+                        <div class="cta-feature">
+                            <span class="cta-feature__icon">🔗</span>
+                            <span>Shareable results</span>
+                        </div>
+                    </div>
+                    <a href="/" class="btn btn--primary btn--lg">
+                        <span>Take the Quiz</span>
+                        <span class="btn-icon">→</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p>&copy; 2025 AI Archetype Quiz</p>
+                    <p class="footer-description">Understanding workplace AI adoption patterns through behavioral science.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="/">Home</a>
+                    <a href="/summary">Live Results</a>
+                    <a href="https://github.com/ubiquitouszero/ai_archetype_quiz" target="_blank">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Auto-refresh every 60 seconds
+        setInterval(() => {
+            const timestamp = new Date().toLocaleTimeString();
+            document.getElementById('last-updated-time').textContent = timestamp;
+        }, 60000);
+
+        // Update last updated time on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const timestamp = new Date().toLocaleTimeString();
+            document.getElementById('last-updated-time').textContent = timestamp;
+        });
+    </script>
+
+    <style>
+        .summary-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .summary-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-card-border);
+        }
+
+        .summary-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--color-text);
+        }
+
+        .summary-subtitle {
+            font-size: 1.25rem;
+            color: var(--color-text-secondary);
+            margin: 0 0 1rem 0;
+        }
+
+        .recent-activity {
+            color: var(--color-success);
+            font-weight: 500;
+        }
+
+        .last-updated {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            font-style: italic;
+        }
+
+        .insights-section {
+            margin-bottom: 3rem;
+        }
+
+        .insights-section h2 {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .insight-card {
+            background: var(--color-surface);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-card-border);
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .insight-card__icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .insight-card__content h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1rem;
+            color: var(--color-text);
+        }
+
+        .insight-card__content p {
+            margin: 0;
+            color: var(--color-text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .distribution-section {
+            margin-bottom: 3rem;
+        }
+
+        .distribution-section h2 {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .distribution-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .distribution-item {
+            background: var(--color-surface);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-card-border);
+        }
+
+        .distribution-item__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .distribution-item__info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .distribution-item__icon {
+            font-size: 1.5rem;
+        }
+
+        .distribution-item__name {
+            margin: 0 0 0.25rem 0;
+            font-size: 1.125rem;
+            color: var(--color-text);
+        }
+
+        .distribution-item__desc {
+            margin: 0;
+            color: var(--color-text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .distribution-item__stats {
+            text-align: right;
+        }
+
+        .distribution-item__percentage {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+
+        .distribution-item__count {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+        }
+
+        .distribution-item__bar {
+            height: 8px;
+            background: var(--color-secondary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .distribution-item__fill {
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+
+        .archetypes-section {
+            margin-bottom: 3rem;
+        }
+
+        .archetypes-section h2 {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .archetypes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .archetype-card {
+            background: var(--color-surface);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-card-border);
+        }
+
+        .archetype-card__header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .archetype-card__icon {
+            font-size: 1.5rem;
+        }
+
+        .archetype-card__header h3 {
+            margin: 0;
+            color: var(--color-text);
+        }
+
+        .archetype-card__description {
+            margin-bottom: 1rem;
+            color: var(--color-text-secondary);
+        }
+
+        .archetype-card__details {
+            margin-bottom: 1rem;
+        }
+
+        .archetype-detail {
+            margin-bottom: 0.75rem;
+        }
+
+        .archetype-detail strong {
+            color: var(--color-text);
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .archetype-detail p {
+            margin: 0;
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+        }
+
+        .archetype-card__stat {
+            padding: 0.75rem;
+            background: var(--color-secondary);
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-align: center;
+            color: var(--color-text);
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+            color: var(--color-btn-primary-text);
+            border-radius: var(--radius-lg);
+            margin: 3rem 0;
+        }
+
+        .cta-section h2 {
+            color: var(--color-btn-primary-text);
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-features {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .cta-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .cta-feature__icon {
+            font-size: 1rem;
+        }
+
+        .footer {
+            background: var(--color-surface);
+            border-top: 1px solid var(--color-border);
+            padding: 2rem 0;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-info p {
+            margin: 0 0 0.5rem 0;
+            color: var(--color-text-secondary);
+        }
+
+        .footer-description {
+            font-size: 0.875rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 768px) {
+            .summary-header h1 {
+                font-size: 2rem;
+            }
+
+            .distribution-item__header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .distribution-item__stats {
+                text-align: left;
+            }
+
+            .cta-features {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</body>
+</html>

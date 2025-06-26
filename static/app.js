@@ -1,181 +1,296 @@
-// Enhanced Quiz Application with FastAPI Integration
+/**
+ * AI Archetype Quiz - Production Application
+ * Integrated with FastAPI backend for acceleratinghumans.com
+ */
+
 class QuizApp {
     constructor() {
-        this.currentPage = 'landing-page';
         this.currentQuestionIndex = 0;
         this.answers = {};
-        this.results = null;
         this.startTime = null;
         this.quizData = null;
+        this.sessionId = null;
+        this.results = null;
         
-        this.initializeApp();
+        this.init();
     }
 
-    async initializeApp() {
+    async init() {
         try {
-            // Load quiz data from API
-            const response = await fetch('/api/quiz/data');
-            this.quizData = await response.json();
+            // Get quiz data from window (embedded in template) or API
+            this.quizData = window.QUIZ_DATA || await this.loadQuizData();
             
-            this.initializeEventListeners();
-            this.showPage('landing-page');
+            if (!this.quizData || !this.quizData.questions) {
+                throw new Error('Quiz data not available');
+            }
+
+            this.bindEvents();
+            this.showScreen('welcome-screen');
+            
+            // Log page view
+            await this.logAnalytics('page_view', { page: 'welcome' });
+            
         } catch (error) {
-            console.error('Failed to load quiz data:', error);
+            console.error('Failed to initialize quiz:', error);
             this.showError('Failed to load quiz. Please refresh the page.');
         }
     }
 
-    // Navigation
-    showPage(pageId) {
-        // Hide all pages
-        document.querySelectorAll('.page').forEach(page => {
-            page.classList.remove('page--active');
+    async loadQuizData() {
+        try {
+            const response = await fetch('/api/quiz/data');
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            return await response.json();
+        } catch (error) {
+            console.error('Failed to load quiz data:', error);
+            throw error;
+        }
+    }
+
+    bindEvents() {
+        // Welcome screen
+        document.getElementById('start-quiz-btn')?.addEventListener('click', () => {
+            this.startQuiz();
         });
-        
-        // Show target page
-        const targetPage = document.getElementById(pageId);
-        if (targetPage) {
-            targetPage.classList.add('page--active');
-            targetPage.classList.add('fade-in');
-            this.currentPage = pageId;
-        }
-    }
 
-    // Event Listeners
-    initializeEventListeners() {
-        // Navigation buttons
-        document.getElementById('start-quiz-btn')?.addEventListener('click', () => this.startQuiz());
-        document.getElementById('admin-nav-btn')?.addEventListener('click', () => this.redirectToAdmin());
-        document.getElementById('retake-quiz-btn')?.addEventListener('click', () => this.retakeQuiz());
-        document.getElementById('view-summary-btn')?.addEventListener('click', () => this.viewSummary());
-        document.getElementById('share-results-btn')?.addEventListener('click', () => this.shareResults());
-        
         // Quiz navigation
-        document.getElementById('prev-btn')?.addEventListener('click', () => this.previousQuestion());
-        document.getElementById('next-btn')?.addEventListener('click', () => this.nextQuestion());
+        document.getElementById('prev-btn')?.addEventListener('click', () => {
+            this.previousQuestion();
+        });
+
+        document.getElementById('next-btn')?.addEventListener('click', () => {
+            this.nextQuestion();
+        });
+
+        // Results screen
+        document.getElementById('retake-btn')?.addEventListener('click', () => {
+            this.resetQuiz();
+        });
+
+        document.getElementById('share-btn')?.addEventListener('click', () => {
+            this.shareResults();
+        });
+
+        document.getElementById('summary-btn')?.addEventListener('click', () => {
+            window.location.href = '/summary';
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (this.getCurrentScreen() === 'quiz-screen') {
+                if (e.key === 'ArrowLeft' && !document.getElementById('prev-btn').disabled) {
+                    this.previousQuestion();
+                } else if (e.key === 'ArrowRight' && !document.getElementById('next-btn').disabled) {
+                    this.nextQuestion();
+                }
+            }
+        });
     }
 
-    // Quiz Logic
-    startQuiz() {
-        if (!this.quizData || !this.quizData.questions) {
-            this.showError('Quiz data not loaded. Please refresh the page.');
-            return;
+    showScreen(screenId) {
+        // Hide all screens
+        document.querySelectorAll('.screen').forEach(screen => {
+            screen.classList.remove('active');
+        });
+
+        // Show target screen
+        const targetScreen = document.getElementById(screenId);
+        if (targetScreen) {
+            targetScreen.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-
-        this.currentQuestionIndex = 0;
-        this.answers = {};
-        this.startTime = new Date();
-        this.showPage('quiz-page');
-        this.renderQuestion();
     }
 
-    renderQuestion() {
+    getCurrentScreen() {
+        const activeScreen = document.querySelector('.screen.active');
+        return activeScreen ? activeScreen.id : null;
+    }
+
+    async startQuiz() {
+        try {
+            this.currentQuestionIndex = 0;
+            this.answers = {};
+            this.startTime = Date.now();
+            
+            await this.logAnalytics('quiz_started');
+            
+            this.showScreen('quiz-screen');
+            this.displayQuestion();
+            
+        } catch (error) {
+            console.error('Error starting quiz:', error);
+            this.showError('Failed to start quiz. Please try again.');
+        }
+    }
+
+    displayQuestion() {
         const question = this.quizData.questions[this.currentQuestionIndex];
-        const currentQuestionNum = this.currentQuestionIndex + 1;
+        const questionNumber = this.currentQuestionIndex + 1;
         const totalQuestions = this.quizData.questions.length;
         
         // Update progress
-        const progressPercent = (currentQuestionNum / totalQuestions) * 100;
-        const progressFill = document.getElementById('progress-fill');
-        if (progressFill) {
-            progressFill.style.width = `${progressPercent}%`;
-        }
+        const progress = (questionNumber / totalQuestions) * 100;
+        document.getElementById('progress-fill').style.width = `${progress}%`;
+        document.getElementById('progress-text').textContent = 
+            `Question ${questionNumber} of ${totalQuestions}`;
         
-        // Update question counter
-        const currentQuestionEl = document.getElementById('current-question');
-        const totalQuestionsEl = document.getElementById('total-questions');
-        if (currentQuestionEl) currentQuestionEl.textContent = currentQuestionNum;
-        if (totalQuestionsEl) totalQuestionsEl.textContent = totalQuestions;
-        
-        // Update question text
-        const questionTextEl = document.getElementById('question-text');
-        if (questionTextEl) {
-            questionTextEl.textContent = question.question;
-        }
-        
-        // Render answer options
-        const answersContainer = document.getElementById('answer-options');
-        if (answersContainer) {
-            answersContainer.innerHTML = '';
-            
-            Object.entries(question.answers).forEach(([key, text]) => {
-                const answerElement = document.createElement('div');
-                answerElement.className = 'answer-option';
-                answerElement.innerHTML = `
-                    <span class="answer-option__label">${key}.</span>
-                    ${text}
-                `;
-                
-                answerElement.addEventListener('click', () => this.selectAnswer(key, answerElement));
-                answersContainer.appendChild(answerElement);
-            });
-        }
-        
+        // Update estimated time remaining
+        const remainingQuestions = totalQuestions - questionNumber;
+        const estimatedMinutes = Math.ceil(remainingQuestions * 0.3); // ~18 seconds per question
+        document.getElementById('progress-time').textContent = 
+            estimatedMinutes > 0 ? `~${estimatedMinutes} min remaining` : 'Almost done!';
+
+        // Display question
+        document.getElementById('question-text').textContent = question.question;
+
+        // Display options
+        this.renderOptions(question);
+
         // Update navigation buttons
+        this.updateNavigationButtons();
+    }
+
+    renderOptions(question) {
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = '';
+
+        Object.entries(question.answers).forEach(([letter, text]) => {
+            const optionElement = document.createElement('div');
+            optionElement.className = 'option-item';
+            optionElement.setAttribute('tabindex', '0');
+            optionElement.setAttribute('role', 'button');
+            optionElement.setAttribute('aria-pressed', 'false');
+            
+            optionElement.innerHTML = `
+                <div class="option-letter">${letter}</div>
+                <div class="option-text">${text}</div>
+            `;
+
+            // Check if this option was previously selected
+            if (this.answers[question.id] === letter) {
+                optionElement.classList.add('selected');
+                optionElement.setAttribute('aria-pressed', 'true');
+            }
+
+            // Click handler
+            optionElement.addEventListener('click', () => {
+                this.selectOption(question.id, letter, optionElement);
+            });
+
+            // Keyboard handler
+            optionElement.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.selectOption(question.id, letter, optionElement);
+                }
+            });
+
+            optionsContainer.appendChild(optionElement);
+        });
+    }
+
+    async selectOption(questionId, letter, optionElement) {
+        try {
+            // Remove previous selection
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.remove('selected');
+                item.setAttribute('aria-pressed', 'false');
+            });
+
+            // Add selection to clicked option
+            optionElement.classList.add('selected');
+            optionElement.setAttribute('aria-pressed', 'true');
+
+            // Store answer
+            this.answers[questionId] = letter;
+
+            // Log answer selection
+            await this.logAnalytics('question_answered', {
+                question_id: questionId,
+                answer: letter,
+                question_number: this.currentQuestionIndex + 1
+            });
+
+            // Update navigation buttons
+            this.updateNavigationButtons();
+            
+            // Add subtle haptic feedback on mobile
+            if ('vibrate' in navigator) {
+                navigator.vibrate(50);
+            }
+            
+        } catch (error) {
+            console.error('Error selecting option:', error);
+        }
+    }
+
+    updateNavigationButtons() {
         const prevBtn = document.getElementById('prev-btn');
         const nextBtn = document.getElementById('next-btn');
-        
-        if (prevBtn) prevBtn.disabled = this.currentQuestionIndex === 0;
-        if (nextBtn) nextBtn.disabled = !this.answers[question.id];
-        
-        // Update next button text
-        if (nextBtn) {
-            nextBtn.textContent = this.currentQuestionIndex === totalQuestions - 1 ? 'Finish Quiz' : 'Next';
+        const currentQuestion = this.quizData.questions[this.currentQuestionIndex];
+        const hasAnswer = this.answers[currentQuestion.id];
+
+        // Previous button
+        prevBtn.disabled = this.currentQuestionIndex === 0;
+
+        // Next button
+        if (this.currentQuestionIndex === this.quizData.questions.length - 1) {
+            nextBtn.innerHTML = `
+                Calculate Results
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4.16667 10H15.8333M15.8333 10L10.8333 5M15.8333 10L10.8333 15" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            `;
+        } else {
+            nextBtn.innerHTML = `
+                Next
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4.16667 10H15.8333M15.8333 10L10.8333 5M15.8333 10L10.8333 15" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            `;
         }
         
-        // Restore selected answer if it exists
-        const savedAnswer = this.answers[question.id];
-        if (savedAnswer && answersContainer) {
-            const selectedOption = Array.from(answersContainer.children).find(
-                option => option.textContent.startsWith(savedAnswer)
-            );
-            if (selectedOption) {
-                selectedOption.classList.add('answer-option--selected');
-            }
-        }
+        nextBtn.disabled = !hasAnswer;
     }
 
-    selectAnswer(answerKey, element) {
-        // Remove previous selection
-        document.querySelectorAll('.answer-option').forEach(option => {
-            option.classList.remove('answer-option--selected');
-        });
-        
-        // Add selection to clicked element
-        element.classList.add('answer-option--selected');
-        
-        // Save answer
-        const questionId = this.quizData.questions[this.currentQuestionIndex].id;
-        this.answers[questionId] = answerKey;
-        
-        // Enable next button
-        const nextBtn = document.getElementById('next-btn');
-        if (nextBtn) nextBtn.disabled = false;
-    }
-
-    previousQuestion() {
+    async previousQuestion() {
         if (this.currentQuestionIndex > 0) {
             this.currentQuestionIndex--;
-            this.renderQuestion();
+            this.displayQuestion();
+            
+            await this.logAnalytics('question_navigation', {
+                direction: 'previous',
+                question_number: this.currentQuestionIndex + 1
+            });
         }
     }
 
-    nextQuestion() {
+    async nextQuestion() {
         if (this.currentQuestionIndex < this.quizData.questions.length - 1) {
             this.currentQuestionIndex++;
-            this.renderQuestion();
+            this.displayQuestion();
+            
+            await this.logAnalytics('question_navigation', {
+                direction: 'next',
+                question_number: this.currentQuestionIndex + 1
+            });
         } else {
-            this.finishQuiz();
+            await this.finishQuiz();
         }
     }
 
     async finishQuiz() {
         try {
-            this.showLoading('Calculating your archetype...');
+            this.showLoading('Calculating your AI archetype...');
             
-            const endTime = new Date();
-            const completionTime = (endTime - this.startTime) / 1000 / 60; // minutes
+            const endTime = Date.now();
+            const completionTimeSeconds = (endTime - this.startTime) / 1000;
             
+            // Submit quiz to backend
             const response = await fetch('/api/quiz/submit', {
                 method: 'POST',
                 headers: {
@@ -183,283 +298,365 @@ class QuizApp {
                 },
                 body: JSON.stringify({
                     responses: this.answers,
-                    completion_time: completionTime
+                    completion_time: completionTimeSeconds,
+                    referrer: document.referrer
                 })
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorData = await response.json();
+                throw new Error(errorData.detail || `HTTP ${response.status}`);
             }
 
             this.results = await response.json();
+            this.sessionId = this.results.session_id;
+            
             this.hideLoading();
-            this.showPage('results-page');
-            this.renderResults();
+            this.showScreen('results-screen');
+            this.displayResults();
+            
+            // Log completion
+            await this.logAnalytics('quiz_completed', {
+                session_id: this.sessionId,
+                archetype: this.results.primary_archetype,
+                archetype_name: this.results.archetype_name,
+                completion_time: completionTimeSeconds
+            });
             
         } catch (error) {
             this.hideLoading();
             console.error('Error submitting quiz:', error);
-            this.showError('Failed to submit quiz. Please try again.');
+            this.showError('Failed to calculate results. Please try again.');
         }
     }
 
-    renderResults() {
+    displayResults() {
         if (!this.results) return;
 
-        const { primary_archetype, scores, archetype_data, session_id } = this.results;
+        const { 
+            primary_archetype, 
+            archetype_name, 
+            scores, 
+            archetype_data, 
+            share_url 
+        } = this.results;
 
         // Update primary archetype display
-        const nameEl = document.getElementById('primary-archetype-name');
-        const scoreEl = document.getElementById('primary-archetype-score');
-        const descEl = document.getElementById('primary-archetype-description');
-        const approachEl = document.getElementById('primary-archetype-approach');
+        document.getElementById('archetype-icon').textContent = archetype_data.icon || '🤖';
+        document.getElementById('archetype-name').textContent = archetype_name;
+        document.getElementById('archetype-description').textContent = archetype_data.description;
+        document.getElementById('primary-score-display').textContent = `${scores[primary_archetype]}%`;
 
-        if (nameEl) nameEl.textContent = primary_archetype;
-        if (scoreEl) scoreEl.textContent = `${scores[primary_archetype]}%`;
-        if (descEl) descEl.textContent = archetype_data.description || '';
-        if (approachEl) approachEl.textContent = archetype_data.approach || '';
+        // Update characteristics
+        this.renderCharacteristics(archetype_data.characteristics);
 
-        // Update characteristics list
-        const characteristicsList = document.getElementById('primary-archetype-characteristics');
-        if (characteristicsList && archetype_data.characteristics) {
-            characteristicsList.innerHTML = '';
-            archetype_data.characteristics.forEach(characteristic => {
-                const li = document.createElement('li');
-                li.textContent = characteristic;
-                characteristicsList.appendChild(li);
-            });
-        }
+        // Update insights
+        document.getElementById('work-approach').textContent = archetype_data.approach;
+        document.getElementById('change-response').textContent = archetype_data.change_response;
+        document.getElementById('archetype-risks').textContent = archetype_data.risks;
 
         // Update score breakdown
-        const scoreBreakdown = document.getElementById('score-breakdown');
-        if (scoreBreakdown) {
-            scoreBreakdown.innerHTML = '';
+        this.renderScoreBreakdown(scores);
+
+        // Store share URL for sharing
+        this.shareUrl = share_url;
+
+        // Add visual enhancements
+        this.addResultsAnimations();
+    }
+
+    renderCharacteristics(characteristics) {
+        const characteristicsList = document.getElementById('characteristics-list');
+        characteristicsList.innerHTML = '';
+        
+        characteristics.forEach((characteristic, index) => {
+            const li = document.createElement('li');
+            li.textContent = characteristic;
+            li.style.animationDelay = `${index * 100}ms`;
+            li.classList.add('fade-in-up');
+            characteristicsList.appendChild(li);
+        });
+    }
+
+    renderScoreBreakdown(scores) {
+        const breakdownChart = document.getElementById('breakdown-chart');
+        breakdownChart.innerHTML = '';
+
+        // Sort archetypes by score (highest first)
+        const sortedScores = Object.entries(scores)
+            .sort(([,a], [,b]) => b - a)
+            .filter(([,score]) => score > 0);
+
+        sortedScores.forEach(([letter, score], index) => {
+            const archetype = this.quizData.archetypes[letter];
             
-            // Sort scores by value for better display
-            const sortedScores = Object.entries(scores).sort(([,a], [,b]) => b - a);
+            const breakdownItem = document.createElement('div');
+            breakdownItem.className = 'breakdown-item';
+            breakdownItem.style.animationDelay = `${index * 150}ms`;
             
-            sortedScores.forEach(([archetype, score]) => {
-                const scoreItem = document.createElement('div');
-                scoreItem.className = 'score-item';
-                const archetypeData = this.quizData.archetypes[archetype] || {};
-                scoreItem.innerHTML = `
-                    <div class="score-item__archetype">
-                        <span class="score-item__icon">${archetypeData.icon || '📊'}</span>
-                        <span class="score-item__name">${archetype}</span>
+            breakdownItem.innerHTML = `
+                <div class="breakdown-info">
+                    <div class="breakdown-label">
+                        <span class="breakdown-icon">${archetype.icon}</span>
+                        <span class="breakdown-name">${archetype.name}</span>
                     </div>
-                    <span class="score-item__value">${score}%</span>
-                `;
-                scoreBreakdown.appendChild(scoreItem);
-            });
-        }
+                    <div class="breakdown-percentage">${score}%</div>
+                </div>
+                <div class="breakdown-bar">
+                    <div class="breakdown-fill" 
+                         style="width: ${score}%; background-color: ${archetype.color}; animation-delay: ${index * 150 + 300}ms;">
+                    </div>
+                </div>
+            `;
 
-        // Store session ID for sharing
-        this.sessionId = session_id;
-        
-        // Update share button with results URL
-        this.updateShareButton();
+            breakdownChart.appendChild(breakdownItem);
+        });
     }
 
-    updateShareButton() {
-        const shareBtn = document.getElementById('share-results-btn');
-        if (shareBtn && this.sessionId) {
-            shareBtn.style.display = 'inline-flex';
-        }
-    }
+    addResultsAnimations() {
+        // Add staggered animations to results elements
+        const animatedElements = document.querySelectorAll('.results-screen .fade-in-up');
+        animatedElements.forEach((el, index) => {
+            el.style.animationDelay = `${index * 100}ms`;
+        });
 
-    shareResults() {
-        if (!this.sessionId) return;
-
-        const resultsUrl = `${window.location.origin}/results/${this.sessionId}`;
-        const shareText = `I just discovered my AI workplace archetype: ${this.results.primary_archetype}! Find out yours:`;
-        
-        if (navigator.share) {
-            navigator.share({
-                title: 'My AI Archetype Results',
-                text: shareText,
-                url: resultsUrl
-            }).catch(console.error);
-        } else {
-            // Fallback to clipboard
-            navigator.clipboard.writeText(`${shareText} ${resultsUrl}`).then(() => {
-                this.showNotification('Results URL copied to clipboard!');
-            }).catch(() => {
-                // Final fallback - show URL
-                prompt('Share this URL:', resultsUrl);
-            });
+        // Animate score ring
+        const scoreRing = document.querySelector('.archetype-score-ring');
+        if (scoreRing) {
+            const score = this.results.scores[this.results.primary_archetype];
+            const circumference = 2 * Math.PI * 45; // radius = 45
+            const offset = circumference - (score / 100) * circumference;
+            
+            setTimeout(() => {
+                scoreRing.style.strokeDasharray = circumference;
+                scoreRing.style.strokeDashoffset = offset;
+            }, 500);
         }
     }
 
-    retakeQuiz() {
-        this.startQuiz();
+    async shareResults() {
+        try {
+            if (!this.shareUrl) {
+                this.showError('No results to share yet.');
+                return;
+            }
+
+            const shareData = {
+                title: `My AI Archetype: ${this.results.archetype_name}`,
+                text: `I just discovered I'm "${this.results.archetype_name}" on the AI Archetype Quiz! ${this.results.archetype_data.description} Take the quiz to find your AI personality:`,
+                url: this.shareUrl
+            };
+
+            // Try native sharing first
+            if (navigator.share && navigator.canShare(shareData)) {
+                await navigator.share(shareData);
+                await this.logAnalytics('result_shared', { method: 'native' });
+            } else {
+                // Fallback to clipboard
+                const shareText = `${shareData.text} ${shareData.url}`;
+                await navigator.clipboard.writeText(shareText);
+                this.showToast('Results link copied to clipboard!');
+                await this.logAnalytics('result_shared', { method: 'clipboard' });
+            }
+        } catch (error) {
+            console.error('Error sharing results:', error);
+            
+            // Final fallback - show share URL
+            this.showShareModal();
+        }
     }
 
-    redirectToAdmin() {
-        window.location.href = '/admin/login';
+    showShareModal() {
+        const modal = document.createElement('div');
+        modal.className = 'share-modal-overlay';
+        modal.innerHTML = `
+            <div class="share-modal">
+                <h3>Share Your Results</h3>
+                <p>Copy this link to share your AI archetype:</p>
+                <div class="share-url-container">
+                    <input type="text" value="${this.shareUrl}" readonly id="share-url-input">
+                    <button class="btn btn--secondary" id="copy-url-btn">Copy</button>
+                </div>
+                <button class="btn btn--outline" id="close-share-modal">Close</button>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        // Event handlers
+        document.getElementById('copy-url-btn').addEventListener('click', async () => {
+            const input = document.getElementById('share-url-input');
+            input.select();
+            document.execCommand('copy');
+            this.showToast('Link copied!');
+            await this.logAnalytics('result_shared', { method: 'modal' });
+        });
+
+        document.getElementById('close-share-modal').addEventListener('click', () => {
+            document.body.removeChild(modal);
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                document.body.removeChild(modal);
+            }
+        });
     }
 
-    viewSummary() {
-        window.location.href = '/summary';
+    async resetQuiz() {
+        try {
+            await this.logAnalytics('quiz_reset');
+            
+            this.currentQuestionIndex = 0;
+            this.answers = {};
+            this.results = null;
+            this.sessionId = null;
+            this.shareUrl = null;
+            
+            this.showScreen('welcome-screen');
+        } catch (error) {
+            console.error('Error resetting quiz:', error);
+        }
     }
 
-    // Utility methods
+    // Utility Methods
     showLoading(message = 'Loading...') {
-        const loadingEl = document.getElementById('loading-overlay');
-        if (loadingEl) {
-            loadingEl.querySelector('.loading-text').textContent = message;
-            loadingEl.style.display = 'flex';
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const loadingText = document.querySelector('.loading-text');
+        
+        if (loadingText) {
+            loadingText.textContent = message;
+        }
+        
+        if (loadingOverlay) {
+            loadingOverlay.style.display = 'flex';
         }
     }
 
     hideLoading() {
-        const loadingEl = document.getElementById('loading-overlay');
-        if (loadingEl) {
-            loadingEl.style.display = 'none';
+        const loadingOverlay = document.getElementById('loading-overlay');
+        if (loadingOverlay) {
+            loadingOverlay.style.display = 'none';
         }
     }
 
     showError(message) {
-        const errorEl = document.getElementById('error-message');
-        if (errorEl) {
-            errorEl.textContent = message;
-            errorEl.style.display = 'block';
+        this.showToast(message, 'error');
+    }
+
+    showToast(message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.className = `toast toast--${type}`;
+        toast.textContent = message;
+
+        const container = document.getElementById('toast-container');
+        if (container) {
+            container.appendChild(toast);
+
+            // Show toast
+            setTimeout(() => toast.classList.add('show'), 100);
+
+            // Hide and remove toast
             setTimeout(() => {
-                errorEl.style.display = 'none';
-            }, 5000);
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    if (container.contains(toast)) {
+                        container.removeChild(toast);
+                    }
+                }, 300);
+            }, 4000);
         } else {
+            // Fallback to alert
             alert(message);
         }
     }
 
-    showNotification(message) {
-        const notificationEl = document.getElementById('notification');
-        if (notificationEl) {
-            notificationEl.textContent = message;
-            notificationEl.classList.add('show');
-            setTimeout(() => {
-                notificationEl.classList.remove('show');
-            }, 3000);
+    async logAnalytics(eventType, data = {}) {
+        try {
+            // Don't block the UI for analytics
+            fetch('/api/analytics', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    event_type: eventType,
+                    session_id: this.sessionId,
+                    data: {
+                        ...data,
+                        timestamp: new Date().toISOString(),
+                        user_agent: navigator.userAgent,
+                        screen_resolution: `${screen.width}x${screen.height}`,
+                        viewport_size: `${window.innerWidth}x${window.innerHeight}`
+                    }
+                })
+            }).catch(error => {
+                console.warn('Analytics logging failed:', error);
+            });
+        } catch (error) {
+            console.warn('Analytics error:', error);
+        }
+    }
+
+    // Performance tracking
+    trackPerformance() {
+        if ('performance' in window) {
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    const perfData = performance.getEntriesByType('navigation')[0];
+                    this.logAnalytics('performance', {
+                        load_time: perfData.loadEventEnd - perfData.loadEventStart,
+                        dom_content_loaded: perfData.domContentLoadedEventEnd - perfData.domContentLoadedEventStart,
+                        page_load_time: perfData.loadEventEnd - perfData.fetchStart
+                    });
+                }, 1000);
+            });
         }
     }
 }
 
-// Initialize the application when DOM is loaded
+// Initialize quiz when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new QuizApp();
+    const quiz = new QuizApp();
+    quiz.trackPerformance();
+    
+    // Make quiz available globally for debugging
+    if (window.location.hostname === 'localhost' || window.location.hostname.includes('dev')) {
+        window.quiz = quiz;
+    }
 });
 
-// Admin Dashboard functionality (if on admin page)
-if (window.location.pathname.includes('/admin')) {
-    class AdminDashboard {
-        constructor() {
-            this.initializeAdmin();
-        }
-
-        async initializeAdmin() {
-            await this.loadStats();
-            this.setupAutoRefresh();
-        }
-
-        async loadStats() {
-            try {
-                const response = await fetch('/api/admin/stats');
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        window.location.href = '/admin/login';
-                        return;
-                    }
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                this.renderStats(data);
-                this.renderArchetypeChart(data);
-                this.renderRecentSubmissions(data);
-            } catch (error) {
-                console.error('Failed to load admin stats:', error);
-            }
-        }
-
-        renderStats(data) {
-            // Update summary stats
-            const elements = {
-                'total-submissions': data.total_submissions,
-                'completion-rate': '92%', // Calculate from data if needed
-                'average-time': `${data.average_completion_time} min`,
-                'most-common-type': Object.keys(data.archetype_distribution)[0] || 'N/A'
-            };
-
-            Object.entries(elements).forEach(([id, value]) => {
-                const el = document.getElementById(id);
-                if (el) el.textContent = value;
-            });
-        }
-
-        renderArchetypeChart(data) {
-            const chartContainer = document.getElementById('archetype-chart');
-            if (!chartContainer || !data.archetype_distribution) return;
-
-            // Simple bar chart using CSS
-            chartContainer.innerHTML = '';
-            
-            const total = Object.values(data.archetype_distribution).reduce((sum, count) => sum + count, 0);
-            
-            Object.entries(data.archetype_distribution).forEach(([archetype, count]) => {
-                const percentage = total > 0 ? Math.round((count / total) * 100) : 0;
-                const archetypeData = data.archetype_data[archetype] || {};
-                
-                const bar = document.createElement('div');
-                bar.className = 'chart-bar';
-                bar.innerHTML = `
-                    <div class="chart-bar__label">
-                        <span class="chart-bar__icon">${archetypeData.icon || '📊'}</span>
-                        ${archetype}
-                    </div>
-                    <div class="chart-bar__value">
-                        <div class="chart-bar__fill" style="width: ${percentage}%; background-color: ${archetypeData.color || '#4ECDC4'}"></div>
-                        <span class="chart-bar__percentage">${percentage}%</span>
-                    </div>
-                `;
-                chartContainer.appendChild(bar);
-            });
-        }
-
-        renderRecentSubmissions(data) {
-            const container = document.getElementById('recent-submissions-list');
-            if (!container || !data.recent_submissions) return;
-
-            container.innerHTML = '';
-
-            data.recent_submissions.slice(0, 10).forEach(submission => {
-                const row = document.createElement('div');
-                row.className = 'table-row';
-                
-                const date = new Date(submission.completed_at);
-                const formattedDate = date.toLocaleDateString();
-                const formattedTime = date.toLocaleTimeString();
-                
-                row.innerHTML = `
-                    <div>${formattedDate} ${formattedTime}</div>
-                    <div>
-                        <span class="archetype-badge" style="background-color: ${data.archetype_data[submission.archetype]?.color || '#4ECDC4'}">
-                            ${submission.archetype}
-                        </span>
-                    </div>
-                    <div>${submission.completion_time || 'N/A'} min</div>
-                    <div>
-                        <a href="/results/${submission.session_id}" target="_blank" class="view-link">View</a>
-                    </div>
-                `;
-                container.appendChild(row);
-            });
-        }
-
-        setupAutoRefresh() {
-            // Refresh stats every 30 seconds
-            setInterval(() => this.loadStats(), 30000);
-        }
+// Error handling
+window.addEventListener('error', (event) => {
+    console.error('Global error:', event.error);
+    
+    // Log critical errors
+    if (window.quiz) {
+        window.quiz.logAnalytics('javascript_error', {
+            message: event.message,
+            filename: event.filename,
+            lineno: event.lineno,
+            colno: event.colno
+        });
     }
+});
 
-    // Initialize admin dashboard
-    new AdminDashboard();
-}
+// Handle visibility changes (user switches tabs)
+document.addEventListener('visibilitychange', () => {
+    if (window.quiz) {
+        window.quiz.logAnalytics('visibility_change', {
+            hidden: document.hidden,
+            screen: window.quiz.getCurrentScreen()
+        });
+    }
+});
+
+// Handle beforeunload (user leaving page)
+window.addEventListener('beforeunload', () => {
+    if (window.quiz && window.quiz.getCurrentScreen() === 'quiz-screen') {
+        window.quiz.logAnalytics('quiz_abandoned', {
+            question_number: window.quiz.currentQuestionIndex + 1,
+            answers_completed: Object.keys(window.quiz.answers).length
+        });
+    }
+});

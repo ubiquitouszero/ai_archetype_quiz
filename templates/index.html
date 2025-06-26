@@ -1,1 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Archetype Quiz - Discover Your Workplace AI Approach | Accelerating Humans</title>
+    <meta name="description" content="Discover your AI workplace personality with our comprehensive archetype quiz. Learn how you approach AI adoption and get personalized insights for professional growth.">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="AI Archetype Quiz - Discover Your Workplace AI Approach">
+    <meta property="og:description" content="Take our quiz to discover your AI workplace personality and get personalized insights for professional growth.">
+    <meta property="og:image" content="https://{{ domain }}/static/images/og-image.png">
+    <meta property="og:url" content="https://{{ domain }}/">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AI Archetype Quiz - Discover Your Workplace AI Approach">
+    <meta name="twitter:description" content="Take our quiz to discover your AI workplace personality and get personalized insights.">
+    <meta name="twitter:image" content="https://{{ domain }}/static/images/og-image.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/static/style.css">
+    
+    <!-- Analytics (add your preferred analytics here) -->
+    <!-- Google Analytics, Plausible, etc. -->
+    
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Quiz",
+        "name": "AI Archetype Quiz",
+        "description": "Discover your AI workplace personality and approach to artificial intelligence adoption",
+        "author": {
+            "@type": "Organization",
+            "name": "Accelerating Humans",
+            "url": "https://{{ domain }}"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Accelerating Humans",
+            "url": "https://{{ domain }}"
+        }
+    }
+    </script>
+</head>
+<body>
+    <!-- Quiz Data -->
+    <script>
+        window.QUIZ_DATA = {{ quiz_data | tojson }};
+        window.DOMAIN = "{{ domain }}";
+    </script>
 
+    <div class="app-container">
+        <!-- Header Navigation -->
+        <header class="site-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <a href="https://{{ domain }}">
+                            <img src="/static/images/logo.svg" alt="Accelerating Humans" height="32">
+                        </a>
+                    </div>
+                    <nav class="header-nav">
+                        <a href="https://{{ domain }}/podcast" class="nav-link">Podcast</a>
+                        <a href="https://{{ domain }}/about" class="nav-link">About</a>
+                        <a href="/summary" class="nav-link">Quiz Stats</a>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="screen active">
+            <div class="container">
+                <div class="welcome-content">
+                    <div class="welcome-hero">
+                        <h1 class="welcome-title">AI Archetype Quiz</h1>
+                        <p class="welcome-subtitle">Discover your approach to AI adoption in the workplace</p>
+                        <div class="welcome-badge">
+                            <span>From the Accelerating Humans Podcast</span>
+                        </div>
+                    </div>
+                    
+                    <div class="intro-section">
+                        <h2>Understanding Your AI Personality</h2>
+                        <p>AI archetypes represent different approaches and attitudes toward artificial intelligence in the workplace. Understanding your archetype can help you and your team navigate AI adoption more effectively, improve collaboration, and make better strategic decisions.</p>
+                        
+                        <div class="benefits-grid">
+                            <div class="benefit-item">
+                                <div class="benefit-icon">🎯</div>
+                                <h3>Self-Awareness</h3>
+                                <p>Understand your natural tendencies and reactions to AI implementation</p>
+                            </div>
+                            <div class="benefit-item">
+                                <div class="benefit-icon">👥</div>
+                                <h3>Team Dynamics</h3>
+                                <p>Better collaborate with colleagues who have different AI perspectives</p>
+                            </div>
+                            <div class="benefit-item">
+                                <div class="benefit-icon">📈</div>
+                                <h3>Strategic Planning</h3>
+                                <p>Make informed decisions about AI adoption based on your organization's mix of archetypes</p>
+                            </div>
+                        </div>
+                        
+                        <div class="quiz-info">
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <strong>10 Questions</strong>
+                                    <span>Carefully crafted scenarios</span>
+                                </div>
+                                <div class="info-item">
+                                    <strong>3-5 Minutes</strong>
+                                    <span>Quick and focused</span>
+                                </div>
+                                <div class="info-item">
+                                    <strong>7 Archetypes</strong>
+                                    <span>Comprehensive personality types</span>
+                                </div>
+                                <div class="info-item">
+                                    <strong>Shareable Results</strong>
+                                    <span>Compare with your team</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="cta-section">
+                        <button class="btn btn--primary btn--lg" id="start-quiz-btn">
+                            <span>Start Your AI Archetype Quiz</span>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4.16667 10H15.8333M15.8333 10L10.8333 5M15.8333 10L10.8333 15" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <p class="cta-note">No email required • Results available immediately</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="screen">
+            <div class="container">
+                <div class="quiz-header">
+                    <div class="progress-container">
+                        <div class="progress-info">
+                            <span class="progress-text" id="progress-text">Question 1 of 10</span>
+                            <span class="progress-time" id="progress-time">~3 min remaining</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="quiz-content">
+                    <div class="question-container">
+                        <h2 class="question-text" id="question-text"></h2>
+                        <div class="options-container" id="options-container">
+                            <!-- Options will be dynamically populated -->
+                        </div>
+                    </div>
+                    
+                    <div class="quiz-navigation">
+                        <button class="btn btn--outline" id="prev-btn" disabled>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15.8333 10H4.16667M4.16667 10L9.16667 15M4.16667 10L9.16667 5" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Previous
+                        </button>
+                        <button class="btn btn--primary" id="next-btn" disabled>
+                            Next
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4.16667 10H15.8333M15.8333 10L10.8333 5M15.8333 10L10.8333 15" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="screen">
+            <div class="container">
+                <div class="results-content">
+                    <div class="results-header">
+                        <h1>Your AI Archetype</h1>
+                        <div class="primary-archetype" id="primary-archetype">
+                            <div class="archetype-visual">
+                                <span class="archetype-icon" id="archetype-icon"></span>
+                                <div class="archetype-score-ring">
+                                    <span id="primary-score-display"></span>
+                                </div>
+                            </div>
+                            <h2 class="archetype-name" id="archetype-name"></h2>
+                            <p class="archetype-description" id="archetype-description"></p>
+                        </div>
+                    </div>
+                    
+                    <div class="results-details">
+                        <div class="characteristics-section">
+                            <h3>Key Characteristics</h3>
+                            <ul class="characteristics-list" id="characteristics-list">
+                                <!-- Characteristics will be populated -->
+                            </ul>
+                        </div>
+                        
+                        <div class="insights-grid">
+                            <div class="insight-card">
+                                <h4>How to Work with This Archetype</h4>
+                                <p id="work-approach"></p>
+                            </div>
+                            
+                            <div class="insight-card">
+                                <h4>Response to Change</h4>
+                                <p id="change-response"></p>
+                            </div>
+                            
+                            <div class="insight-card">
+                                <h4>Potential Risks</h4>
+                                <p id="archetype-risks"></p>
+                            </div>
+                        </div>
+                        
+                        <div class="breakdown-section">
+                            <h3>Your Complete Archetype Breakdown</h3>
+                            <div class="breakdown-chart" id="breakdown-chart">
+                                <!-- Breakdown will be populated -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="results-actions">
+                        <button class="btn btn--outline" id="retake-btn">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1.5 1.5L18.5 18.5M1.5 18.5L18.5 1.5" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Retake Quiz
+                        </button>
+                        <button class="btn btn--secondary" id="summary-btn">
+                            View All Results
+                        </button>
+                        <button class="btn btn--primary" id="share-btn">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13.3333 6.66667C14.8061 6.66667 16 5.47276 16 4C16 2.52724 14.8061 1.33333 13.3333 1.33333C11.8606 1.33333 10.6667 2.52724 10.6667 4C10.6667 5.47276 11.8606 6.66667 13.3333 6.66667Z" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M6.66667 12C8.13943 12 9.33333 10.8061 9.33333 9.33333C9.33333 7.86057 8.13943 6.66667 6.66667 6.66667C5.19391 6.66667 4 7.86057 4 9.33333C4 10.8061 5.19391 12 6.66667 12Z" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M13.3333 18.6667C14.8061 18.6667 16 17.4728 16 16C16 14.5272 14.8061 13.3333 13.3333 13.3333C11.8606 13.3333 10.6667 14.5272 10.6667 16C10.6667 17.4728 11.8606 18.6667 13.3333 18.6667Z" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M9.08 8L11.5867 5.33333" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M9.08 10.6667L11.5867 14.6667" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Share Results
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loading-overlay" class="loading-overlay" style="display: none;">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Analyzing your responses...</div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="site-footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h4>Accelerating Humans</h4>
+                        <p>Exploring the intersection of AI and human potential</p>
+                        <div class="social-links">
+                            <!-- Add your social media links -->
+                        </div>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="https://{{ domain }}/podcast">Podcast</a></li>
+                            <li><a href="/summary">Quiz Statistics</a></li>
+                            <li><a href="https://{{ domain }}/about">About</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Quiz Info</h4>
+                        <ul>
+                            <li><a href="#" id="privacy-link">Privacy Policy</a></li>
+                            <li><a href="#" id="terms-link">Terms of Use</a></li>
+                            <li><a href="#" id="contact-link">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2024 Accelerating Humans. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="/static/app.js"></script>
+</body>
+</html>

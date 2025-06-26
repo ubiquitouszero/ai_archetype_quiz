@@ -1,1 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ primary_archetype }} - AI Archetype Results</title>
+    <link rel="stylesheet" href="/static/style.css">
+    
+    <!-- SEO and Social Media -->
+    <meta name="description" content="I'm a {{ primary_archetype }} when it comes to AI at work! Discover your AI workplace archetype.">
+    <meta property="og:title" content="I'm a {{ primary_archetype }}! - AI Archetype Quiz">
+    <meta property="og:description" content="{{ archetype_data.description }} Take the quiz to discover your AI workplace style.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.url }}">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="I'm a {{ primary_archetype }}! - AI Archetype Quiz">
+    <meta name="twitter:description" content="{{ archetype_data.description }}">
+</head>
+<body>
+    <nav class="nav">
+        <div class="container flex justify-between items-center">
+            <h1 class="nav__brand">AI Archetype Quiz</h1>
+            <div class="nav__links">
+                <a href="/" class="btn btn--primary btn--sm">Take Quiz</a>
+                <a href="/summary" class="btn btn--outline btn--sm">View All Results</a>
+            </div>
+        </div>
+    </nav>
 
+    <div class="container">
+        <div class="results-container" style="margin-top: 2rem;">
+            <!-- Shared Results Header -->
+            <div class="shared-results-header">
+                <div class="shared-badge">
+                    <span class="shared-badge__label">Shared AI Archetype Result</span>
+                    <div class="shared-badge__date">{{ completed_at[:10] if completed_at else 'Recently' }}</div>
+                </div>
+                <h1 class="shared-results-title">
+                    Someone is a <strong style="color: {{ archetype_data.color }}">{{ primary_archetype }}</strong>
+                </h1>
+                <p class="shared-results-subtitle">{{ archetype_data.description }}</p>
+            </div>
+
+            <!-- Primary Archetype Display -->
+            <div class="primary-archetype-card">
+                <div class="archetype-badge" style="background: linear-gradient(135deg, {{ archetype_data.color }}, {{ archetype_data.color }}dd);">
+                    <div class="archetype-badge__icon">{{ archetype_data.icon }}</div>
+                    <h2 class="archetype-badge__name">{{ primary_archetype }}</h2>
+                    <div class="archetype-badge__score">{{ scores[primary_archetype] }}%</div>
+                </div>
+                <div class="archetype-details">
+                    <p class="archetype-description">{{ archetype_data.description }}</p>
+                    
+                    <div class="archetype-characteristics">
+                        <h4>Key Characteristics:</h4>
+                        <ul>
+                            {% for characteristic in archetype_data.characteristics %}
+                            <li>{{ characteristic }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    
+                    <div class="archetype-approach">
+                        <h4>How to work with them:</h4>
+                        <p>{{ archetype_data.approach }}</p>
+                    </div>
+
+                    {% if archetype_data.risk %}
+                    <div class="archetype-risk">
+                        <h4>Potential Challenges:</h4>
+                        <p>{{ archetype_data.risk }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Score Breakdown -->
+            <div class="all-scores-section">
+                <h3>Complete Score Breakdown</h3>
+                <div class="score-breakdown">
+                    {% for archetype, score in scores.items() | sort(attribute=1, reverse=true) %}
+                    <div class="score-item {% if archetype == primary_archetype %}score-item--primary{% endif %}">
+                        <div class="score-item__archetype">
+                            <span class="score-item__icon">{{ all_archetypes[archetype].icon }}</span>
+                            <span class="score-item__name">{{ archetype }}</span>
+                        </div>
+                        <span class="score-item__value">{{ score }}%</span>
+                        {% if archetype == primary_archetype %}
+                        <span class="score-item__badge">Primary</span>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- About the Quiz -->
+            <div class="about-quiz-section">
+                <h3>About This Quiz</h3>
+                <div class="about-quiz-content">
+                    <p>This assessment identifies how individuals approach AI in the workplace based on research into organizational change patterns and behavioral archetypes.</p>
+                    
+                    <div class="quiz-features">
+                        <div class="quiz-feature">
+                            <div class="quiz-feature__icon">🎯</div>
+                            <div>
+                                <strong>7 Research-Based Archetypes</strong>
+                                <p>From eager Pioneers to cautious Guardians</p>
+                            </div>
+                        </div>
+                        <div class="quiz-feature">
+                            <div class="quiz-feature__icon">⚡</div>
+                            <div>
+                                <strong>Quick Assessment</strong>
+                                <p>10 questions, 3-5 minutes to complete</p>
+                            </div>
+                        </div>
+                        <div class="quiz-feature">
+                            <div class="quiz-feature__icon">📊</div>
+                            <div>
+                                <strong>Actionable Insights</strong>
+                                <p>Understand your approach and get recommendations</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to Action -->
+            <div class="cta-section">
+                <h3>Discover Your AI Archetype</h3>
+                <p>Take the quiz to understand how you approach AI in the workplace and get personalized recommendations for success.</p>
+                <div class="cta-buttons">
+                    <a href="/" class="btn btn--primary btn--lg">
+                        <span>Take the Quiz</span>
+                        <span class="btn-icon">→</span>
+                    </a>
+                    <a href="/summary" class="btn btn--outline">View All Results</a>
+                </div>
+            </div>
+
+            <!-- Share Actions -->
+            <div class="share-section">
+                <h4>Share These Results</h4>
+                <div class="share-buttons">
+                    <button class="btn btn--outline btn--sm" onclick="shareResults()">
+                        <span class="btn-icon">📤</span>
+                        Share Link
+                    </button>
+                    <button class="btn btn--outline btn--sm" onclick="shareOnLinkedIn()">
+                        <span class="btn-icon">💼</span>
+                        Share on LinkedIn
+                    </button>
+                    <button class="btn btn--outline btn--sm" onclick="shareOnTwitter()">
+                        <span class="btn-icon">🐦</span>
+                        Share on Twitter
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 AI Archetype Quiz. Built for understanding workplace AI adoption patterns.</p>
+                <div class="footer-links">
+                    <a href="/">Home</a>
+                    <a href="/summary">Results</a>
+                    <a href="https://github.com/ubiquitouszero/ai_archetype_quiz" target="_blank">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function shareResults() {
+            const url = window.location.href;
+            const text = `I'm a {{ primary_archetype }} when it comes to AI at work! {{ archetype_data.description }} Discover your AI workplace archetype:`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'My AI Archetype Results',
+                    text: text,
+                    url: url
+                });
+            } else {
+                navigator.clipboard.writeText(`${text} ${url}`).then(() => {
+                    alert('Results URL copied to clipboard!');
+                });
+            }
+        }
+
+        function shareOnLinkedIn() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent(`I just discovered I'm a {{ primary_archetype }} when it comes to AI at work! {{ archetype_data.description }}`);
+            window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}&text=${text}`, '_blank');
+        }
+
+        function shareOnTwitter() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent(`I'm a {{ primary_archetype }} when it comes to AI at work! 🤖 Discover your AI workplace archetype:`);
+            window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+        }
+    </script>
+
+    <style>
+        .shared-results-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-card-border);
+        }
+
+        .shared-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--color-secondary);
+            border-radius: var(--radius-full);
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .shared-badge__date {
+            font-size: 0.75rem;
+            opacity
