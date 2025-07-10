@@ -24,45 +24,60 @@ def init_db():
     """Initialize database with analytics and results tables"""
     conn = sqlite3.connect(DB_PATH)
     
-    # Results table - updated to include role demographics
-    conn.execute('''
-        CREATE TABLE IF NOT EXISTS results (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            session_id TEXT UNIQUE NOT NULL,
-            primary_archetype TEXT NOT NULL,
-            archetype_name TEXT NOT NULL,
-            all_scores TEXT NOT NULL,
-            responses TEXT NOT NULL,
-            role_demographic TEXT,
-            completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            completion_time REAL,
-            user_agent TEXT,
-            ip_address TEXT
-        )
-    ''')
-    
-    # Analytics table
-    conn.execute('''
-        CREATE TABLE IF NOT EXISTS analytics (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            event_type TEXT NOT NULL,
-            session_id TEXT,
-            event_data TEXT,
-            ip_address TEXT,
-            user_agent TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    ''')
-    
-    # Create indexes
-    conn.execute('CREATE INDEX IF NOT EXISTS idx_results_archetype ON results(primary_archetype)')
-    conn.execute('CREATE INDEX IF NOT EXISTS idx_results_completed ON results(completed_at)')
-    conn.execute('CREATE INDEX IF NOT EXISTS idx_results_role ON results(role_demographic)')
-    conn.execute('CREATE INDEX IF NOT EXISTS idx_analytics_event ON analytics(event_type)')
-    conn.execute('CREATE INDEX IF NOT EXISTS idx_analytics_created ON analytics(created_at)')
-    
-    conn.commit()
-    conn.close()
+    try:
+        # Results table - base schema first
+        conn.execute('''
+            CREATE TABLE IF NOT EXISTS results (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                session_id TEXT UNIQUE NOT NULL,
+                primary_archetype TEXT NOT NULL,
+                archetype_name TEXT NOT NULL,
+                all_scores TEXT NOT NULL,
+                responses TEXT NOT NULL,
+                completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                completion_time REAL,
+                user_agent TEXT,
+                ip_address TEXT
+            )
+        ''')
+        
+        # Check if role_demographic column exists, if not add it
+        cursor = conn.execute("PRAGMA table_info(results)")
+        columns = [column[1] for column in cursor.fetchall()]
+        
+        if 'role_demographic' not in columns:
+            print("Adding role_demographic column...")
+            conn.execute('ALTER TABLE results ADD COLUMN role_demographic TEXT')
+        
+        # Analytics table
+        conn.execute('''
+            CREATE TABLE IF NOT EXISTS analytics (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                event_type TEXT NOT NULL,
+                session_id TEXT,
+                event_data TEXT,
+                ip_address TEXT,
+                user_agent TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        
+        # Create indexes - now safe to create the role index since column exists
+        conn.execute('CREATE INDEX IF NOT EXISTS idx_results_archetype ON results(primary_archetype)')
+        conn.execute('CREATE INDEX IF NOT EXISTS idx_results_completed ON results(completed_at)')
+        conn.execute('CREATE INDEX IF NOT EXISTS idx_results_role ON results(role_demographic)')
+        conn.execute('CREATE INDEX IF NOT EXISTS idx_analytics_event ON analytics(event_type)')
+        conn.execute('CREATE INDEX IF NOT EXISTS idx_analytics_created ON analytics(created_at)')
+        
+        conn.commit()
+        print("Database initialized successfully")
+        
+    except Exception as e:
+        print(f"Database initialization error: {e}")
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
 
 # Initialize database
 init_db()
