@@ -996,7 +996,30 @@ async def home(request: Request):
                 margin: 0;
                 line-height: 1.4;
             }}
-            
+                        
+            /* Fix secondary archetype bullet points */
+            #secondary-characteristics {{
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }}
+
+            #secondary-characteristics li {{
+                position: relative;
+                padding-left: 1.5rem;
+                margin-bottom: 0.5rem;
+                text-align: left;
+            }}
+
+            #secondary-characteristics li::before {{
+                content: "•";
+                position: absolute;
+                left: 0;
+                color: #7c3aed;
+                font-weight: bold;
+                font-size: 1.2rem;
+            }}
+
             @media (max-width: 768px) {{
                 .container {{
                     padding: 10px;
@@ -1490,33 +1513,72 @@ async def home(request: Request):
                 showScreen('results');
             }}
             
+            // Radar Chart Function - uses the embedded QUIZ_DATA to show archetype scores in a radar chart
+            // Chart will render with High-DPI for crisp radar chart function at the right size
+            // Radar chart with proper title spacing to avoid overlap
             function createRadarChart(scores) {{
                 const canvas = document.getElementById('radar-chart');
-                if (!canvas) return;
+                if (!canvas || !canvas.getContext) {{
+                    console.warn('Canvas not supported or not found');
+                    return;
+                }}
                 
                 const ctx = canvas.getContext('2d');
                 
-                // Responsive sizing
+                // Get device pixel ratio for crisp rendering
+                const dpr = window.devicePixelRatio || 1;
+                
+                // Make it larger
                 const containerWidth = canvas.parentElement.offsetWidth;
-                const size = Math.min(containerWidth - 40, 500); // Max 500px, responsive
-                canvas.width = size;
-                canvas.height = size;
+                const maxSize = Math.min(containerWidth * 0.95, 700);
+                const size = Math.max(maxSize, 400);
+                
+                console.log("Container width:", containerWidth, "Chart size:", size);
+                
+                // Set display size (CSS pixels)
+                canvas.style.width = size + 'px';
+                canvas.style.height = size + 'px';
+                
+                // Set actual canvas size in memory (scaled for high-DPI)
+                canvas.width = size * dpr;
+                canvas.height = size * dpr;
+                
+                // Scale the drawing context
+                ctx.scale(dpr, dpr);
+                
+                // Calculate proper spacing to avoid overlap
+                const titleHeight = 50; // Space reserved for title
+                const labelSpace = Math.max(65, size * 0.14); // Space for outer labels
                 
                 const centerX = size / 2;
-                const centerY = size / 2;
-                const radius = Math.min(centerX, centerY) - 80; // More padding for labels
+                const centerY = (size + titleHeight) / 2; // Move center down to account for title
+                const availableRadius = Math.min(centerX - labelSpace, centerY - titleHeight - labelSpace);
+                const radius = Math.max(availableRadius, 80);
+                
+                console.log("Center:", centerX, centerY, "Radius:", radius, "Title height:", titleHeight);
                 
                 // Clear canvas
                 ctx.clearRect(0, 0, size, size);
                 
                 // Get archetype data
                 const archetypes = Object.keys(quizData.archetypes);
-                const colors = Object.values(quizData.archetypes).map(a => a.color);
-                const maxScore = Math.max(...Object.values(scores)) || 1;
+                const archetypeData = quizData.archetypes;
                 
-                // Enhanced styling
+                if (archetypes.length === 0) {{
+                    console.warn('No archetype data available');
+                    return;
+                }}
+                
+                // Enhanced styling for crisp rendering
                 ctx.lineJoin = 'round';
                 ctx.lineCap = 'round';
+                ctx.textBaseline = 'middle';
+                
+                // Draw title FIRST at the very top with safe spacing
+                ctx.font = `600 ${{Math.max(16, size * 0.034)}}px -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif`;
+                ctx.fillStyle = '#1f2937';
+                ctx.textAlign = 'center';
+                ctx.fillText('Your Archetype Profile', centerX, 25); // Safe position at very top
                 
                 // Draw background grid circles
                 ctx.strokeStyle = '#e5e7eb';
@@ -1529,10 +1591,10 @@ async def home(request: Request):
                     ctx.arc(centerX, centerY, gridRadius, 0, 2 * Math.PI);
                     ctx.stroke();
                     
-                    // Add value labels on grid lines
+                    // Add value labels
                     if (i > 0) {{
                         ctx.fillStyle = '#9ca3af';
-                        ctx.font = '11px Inter, sans-serif';
+                        ctx.font = `${{Math.max(11, size * 0.025)}}px -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif`;
                         ctx.textAlign = 'center';
                         ctx.fillText((i * 2).toString(), centerX + gridRadius - 15, centerY - 5);
                     }}
@@ -1546,7 +1608,7 @@ async def home(request: Request):
                 const dataPoints = [];
                 
                 archetypes.forEach((archetype, i) => {{
-                    const angle = i * angleStep - Math.PI / 2; // Start from top
+                    const angle = i * angleStep - Math.PI / 2;
                     const x = centerX + Math.cos(angle) * radius;
                     const y = centerY + Math.sin(angle) * radius;
                     
@@ -1558,36 +1620,36 @@ async def home(request: Request):
                     
                     // Calculate data point position
                     const score = scores[archetype] || 0;
-                    const normalizedScore = (score / 10) * radius; // Scores are 0-10
+                    const normalizedScore = Math.min(score / 10, 1) * radius;
                     const dataX = centerX + Math.cos(angle) * normalizedScore;
                     const dataY = centerY + Math.sin(angle) * normalizedScore;
                     
                     dataPoints.push({{ x: dataX, y: dataY, score, archetype, angle }});
                     
-                    // Draw archetype labels
-                    const labelDistance = radius + 35;
+                    // Draw archetype labels with proper distance to avoid title overlap
+                    const labelDistance = radius + labelSpace * 0.8; // Use most of the reserved label space
                     const labelX = centerX + Math.cos(angle) * labelDistance;
                     const labelY = centerY + Math.sin(angle) * labelDistance;
                     
-                    const archetypeData = quizData.archetypes[archetype];
+                    const currentArchetypeData = archetypeData[archetype];
                     
                     // Icon
-                    ctx.font = '20px Arial';
+                    ctx.font = `${{Math.max(22, size * 0.042)}}px -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif`;
                     ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillStyle = colors[i] || '#667eea';
-                    ctx.fillText(archetypeData.icon, labelX, labelY - 12);
+                    ctx.fillStyle = currentArchetypeData.color || '#667eea';
+                    ctx.fillText(currentArchetypeData.icon, labelX, labelY - 16);
                     
                     // Name
-                    ctx.font = 'bold 11px Inter, sans-serif';
+                    ctx.font = `600 ${{Math.max(12, size * 0.028)}}px -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif`;
                     ctx.fillStyle = '#374151';
-                    ctx.fillText(archetypeData.name, labelX, labelY + 8);
+                    const name = size < 500 ? currentArchetypeData.name.split(' ')[1] || currentArchetypeData.name : currentArchetypeData.name;
+                    ctx.fillText(name, labelX, labelY + 4);
                     
                     // Score (if significant)
                     if (score >= 1) {{
-                        ctx.font = '10px Inter, sans-serif';
+                        ctx.font = `${{Math.max(11, size * 0.025)}}px -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif`;
                         ctx.fillStyle = '#6b7280';
-                        ctx.fillText(score.toString(), labelX, labelY + 20);
+                        ctx.fillText(score.toString(), labelX, labelY + 22);
                     }}
                 }});
                 
@@ -1618,17 +1680,19 @@ async def home(request: Request):
                 
                 // Draw data points
                 dataPoints.forEach((point, i) => {{
-                    if (point.score >= 0.5) {{ // Only show meaningful scores
+                    if (point.score >= 0.5) {{
+                        const archetypeColor = archetypeData[point.archetype].color || '#667eea';
+                        
                         // Outer glow
                         ctx.beginPath();
-                        ctx.arc(point.x, point.y, 8, 0, 2 * Math.PI);
+                        ctx.arc(point.x, point.y, 9, 0, 2 * Math.PI);
                         ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
                         ctx.fill();
                         
                         // Main point
                         ctx.beginPath();
-                        ctx.arc(point.x, point.y, 5, 0, 2 * Math.PI);
-                        ctx.fillStyle = colors[i] || '#667eea';
+                        ctx.arc(point.x, point.y, 6, 0, 2 * Math.PI);
+                        ctx.fillStyle = archetypeColor;
                         ctx.fill();
                         
                         // Border
@@ -1640,15 +1704,11 @@ async def home(request: Request):
                 
                 // Add center point
                 ctx.beginPath();
-                ctx.arc(centerX, centerY, 3, 0, 2 * Math.PI);
+                ctx.arc(centerX, centerY, 4, 0, 2 * Math.PI);
                 ctx.fillStyle = '#9ca3af';
                 ctx.fill();
                 
-                // Add title
-                ctx.font = 'bold 14px Inter, sans-serif';
-                ctx.fillStyle = '#1f2937';
-                ctx.textAlign = 'center';
-                ctx.fillText('Your Archetype Profile', centerX, 20);
+                console.log("Radar chart with no title overlap completed!");
             }}
             
             function toggleArchetypes() {{
@@ -1966,7 +2026,7 @@ async def references_page():
             <div class="framework-note">
                 <h3>Citation & Use</h3>
                 <p>When referencing the AI Archetype Quiz in academic work, please cite as:</p>
-                <p><em>AI Archetype Quiz: Understanding Workplace AI Adoption Patterns Through Behavioral Archetypes. Accelerating Humans. Available at: [your-domain.com]</em></p>
+                <p><em>Carroll, R. (2025). AI Archetype Quiz: Understanding Workplace AI Adoption Patterns Through Behavioral Archetypes. Accelerating Humans. Available at: https://aiarchetypes.acceleratinghumans.com</em></p>
             </div>
 
             <div class="back-nav">
@@ -2224,19 +2284,33 @@ async def summary_page():
     try:
         conn = sqlite3.connect(DB_PATH)
         
-        # Get archetype distribution
-        cursor = conn.execute('''
-            SELECT primary_archetype, archetype_name, COUNT(*) as count,
-                   ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM results), 1) as percentage
-            FROM results 
-            GROUP BY primary_archetype, archetype_name
-            ORDER BY count DESC
-        ''')
-        distribution = cursor.fetchall()
-        
-        # Get total submissions
+        # Get total submissions first
         cursor = conn.execute('SELECT COUNT(*) FROM results')
         total = cursor.fetchone()[0]
+
+        # Get actual responses by archetype
+        cursor = conn.execute('''
+            SELECT primary_archetype, archetype_name, COUNT(*) as count
+            FROM results 
+            GROUP BY primary_archetype, archetype_name
+        ''')
+        actual_responses = {row[0]: (row[1], row[2]) for row in cursor.fetchall()}
+
+        # Create complete distribution including all archetypes
+        distribution = []
+        for archetype_key, archetype_data in QUIZ_DATA["archetypes"].items():
+            if archetype_key in actual_responses:
+                name, count = actual_responses[archetype_key]
+                percentage = round(count * 100.0 / total, 1) if total > 0 else 0.0
+            else:
+                name = archetype_data["name"]
+                count = 0
+                percentage = 0.0
+            
+            distribution.append((archetype_key, name, count, percentage))
+
+        # Sort by count (highest first), then by name for ties
+        distribution.sort(key=lambda x: (-x[2], x[1]))
         
         # Get recent activity (last 7 days)
         cursor = conn.execute('''

@@ -1,385 +1,187 @@
-# AI Archetype Quiz
+# AI Archetype Quiz v1.0
 
-A comprehensive 10-question assessment to discover workplace AI personalities, built for the [Accelerating Humans Podcast](https://acceleratinghumans.com). This professional-grade quiz identifies how individuals approach AI adoption and provides personalized insights for teams and organizations.
+**Professional AI workplace personality assessment for the Accelerating Humans podcast**
 
-## 🚀 Live Demo
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-aiarchetypes.acceleratinghumans.com-blue)](https://aiarchetypes.acceleratinghumans.com)
+[![Version](https://img.shields.io/badge/Version-1.0-green)](https://github.com/yourusername/ai-archetype-quiz)
+[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
-- **Take the Quiz**: [https://ai-archetype-quiz.fly.dev](https://ai-archetype-quiz.fly.dev)
-- **Live Results**: [https://ai-archetype-quiz.fly.dev/summary](https://ai-archetype-quiz.fly.dev/summary)
-- **API Health**: [https://ai-archetype-quiz.fly.dev/health](https://ai-archetype-quiz.fly.dev/health)
+## Overview
 
-## 🧠 The 11 AI Archetypes
+The AI Archetype Quiz helps professionals understand their natural approach to AI adoption in the workplace. Based on leading research in technology adoption, behavioral science, and digital transformation, it identifies one of 11 research-backed archetypes that describe how people navigate AI implementation.
 
-The quiz identifies distinct workplace AI personalities based on behavioral research and technology adoption patterns:
+**🎯 Purpose**: Help individuals and organizations navigate AI transformation with clarity and reduce conflict during technology adoption.
 
-| Archetype | Icon | Core Approach | Key Traits |
-|-----------|------|---------------|------------|
-| **The Scholar** | 📚 | Evidence-based analysis | Research-focused, data-driven, methodical |
-| **The Strategist** | 📈 | Business value optimization | ROI-focused, competitive, goal-oriented |
-| **The Humanist** | 🤝 | People-centered implementation | Empathetic, collaborative, values-driven |
-| **The Pragmatist** | 🔧 | Practical, incremental adoption | Realistic, implementation-focused, steady |
-| **The Guardian** | 🛡️ | Risk management and safety | Security-conscious, compliant, cautious |
-| **The Egalitarian** | ⚖️ | Equity and fairness focus | Inclusive, justice-oriented, collaborative |
-| **The Innovator** | 🚀 | Cutting-edge exploration | Experimental, visionary, fast-moving |
-| **The Steward** | 🌱 | Sustainable and responsible AI | Environmental, long-term thinking, ethical |
-| **The Learner** | 🎓 | Education and skill building | Growth-oriented, curious, adaptive |
-| **The Integrator** | 🔗 | Systems and process focus | Systematic, organized, bridge-building |
-| **The Skeptic** | 🤔 | Critical evaluation | Questioning, cautious, analytical |
+## Features
 
-## ✨ Features
+### ✨ Core Functionality
+- **10-question strategic assessment** (~5 minutes)
+- **11 research-based archetypes** with detailed profiles
+- **Professional scoring system** (position-independent weighting)
+- **Interactive radar chart visualization** (high-DPI, responsive)
+- **Primary + secondary archetype detection**
+- **Role-based demographic analysis**
 
-### Professional Assessment
-- **Research-Based Framework** - Built on technology adoption research (Rogers, UTAUT) and behavioral science
-- **Position-Independent Scoring** - Answer order doesn't affect results, professional scoring algorithm
-- **Multi-Choice Support** - Select up to 3 options per question with weighted scoring
-- **Demographic Analytics** - Role-based insights for organizational planning
+### 📊 Analytics & Insights
+- Real-time response tracking
+- Archetype distribution analytics
+- Role demographic breakdowns
+- Completion time metrics
+- Public summary statistics
 
-### User Experience
-- **Mobile-First Design** - Responsive interface with modern gradient aesthetics
-- **Accessibility Compliant** - WCAG guidelines, keyboard navigation, screen reader support
-- **Progress Tracking** - Real-time progress with time estimates
-- **Results Visualization** - Interactive radar charts and detailed breakdowns
+### 🔧 Technical Features
+- **FastAPI backend** with SQLite database
+- **Responsive design** (mobile-first)
+- **High-performance SMS-style UX** 
+- **Shareable results** with unique URLs
+- **Research references** with academic citations
 
-### Analytics & Insights
-- **Comprehensive Tracking** - Question-level analytics, completion patterns, user behavior
-- **Role Demographics** - Executive, team leader, individual contributor insights
-- **Shareable Results** - Individual result pages with social sharing
-- **Live Dashboard** - Public statistics for podcast insights and research
+## Archetypes
 
-### Technical Excellence
-- **High Performance** - SQLite with WAL mode, optimized queries, efficient caching
-- **Scalable Architecture** - FastAPI backend, persistent volumes, auto-scaling
-- **Database Migrations** - Automatic schema updates, backwards compatibility
-- **Health Monitoring** - Comprehensive health checks and error tracking
+| Archetype | Description | Icon |
+|-----------|-------------|------|
+| **The Scholar** | Scientific inquiry and intellectual rigor | 📚 |
+| **The Strategist** | Competitive advantage and business value | 📈 |
+| **The Humanist** | Human wellbeing and dignity | 🤝 |
+| **The Pragmatist** | Practical implementation and evidence | 🔧 |
+| **The Guardian** | Risk management and governance | 🛡️ |
+| **The Egalitarian** | Fairness and equity | ⚖️ |
+| **The Innovator** | Transformative change and experimentation | 🚀 |
+| **The Steward** | Environmental and resource stewardship | 🌱 |
+| **The Learner/Educator** | AI literacy and skill development | 🎓 |
+| **The Integrator/Facilitator** | Implementation and process improvement | 🔗 |
+| **The Skeptic/Resistor** | Critical evaluation and risk awareness | 🤔 |
 
-## 📊 API Endpoints
-
-### Public Endpoints
-- `GET /` - Interactive quiz interface
-- `GET /results/{session_id}` - Shareable individual results
-- `GET /summary` - Public statistics dashboard
-- `GET /health` - Application health status
-
-### API Endpoints
-- `POST /api/submit` - Submit quiz responses
-- `GET /api/stats` - Aggregate analytics (JSON)
-- `POST /api/analytics` - Event tracking
-- `GET /api/quiz/data` - Quiz structure (if needed)
-
-## 🛠 Technical Stack
-
-- **Backend**: FastAPI 0.104+ with Python 3.11
-- **Database**: SQLite with Write-Ahead Logging (WAL)
-- **Frontend**: Vanilla JavaScript with modern CSS
-- **Deployment**: Fly.io with persistent volumes
-- **Analytics**: Custom event tracking system
-- **Styling**: CSS Grid/Flexbox with design system
-
-## 📈 Analytics & Research
-
-### Comprehensive Data Collection
-- **User Journey Tracking**: Page views, quiz starts, question interactions, completions
-- **Behavioral Insights**: Answer patterns, completion times, navigation behavior
-- **Performance Metrics**: Load times, error rates, user engagement
-- **Demographic Analysis**: Role-based archetype distributions
-
-### Research Applications
-- **Organizational Assessment**: Team AI readiness evaluation
-- **Change Management**: Tailored adoption strategies by archetype
-- **Training Programs**: Personalized learning paths
-- **Market Research**: Industry AI adoption patterns
-
-### Privacy & Ethics
-- **Anonymous by Default**: No PII collection, session-based tracking
-- **Transparent Data Use**: Clear analytics disclosure
-- **User Control**: Shareable results are opt-in
-- **GDPR Considerations**: EU-compliant data handling
-
-## 🚀 Quick Deployment
-
-### Deploy to Fly.io (Recommended)
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/ai-archetype-quiz.git
-cd ai-archetype-quiz
-
-# Install Fly CLI
-curl -L https://fly.io/install.sh | sh
-
-# Login and deploy
-flyctl auth login
-flyctl launch --copy-config --name your-app-name
-
-# Create persistent volume for database
-flyctl volumes create quiz_data --size 1gb
-
-# Deploy application
-flyctl deploy
-```
+## Quick Start
 
 ### Local Development
 
 ```bash
-# Install dependencies
-pip install -r requirements.txt
+# Clone repository
+git clone https://github.com/yourusername/ai-archetype-quiz.git
+cd ai-archetype-quiz
 
-# Run development server
-python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+# Install dependencies
+pip install fastapi uvicorn sqlite3
+
+# Run locally
+python main.py
 
 # Access at http://localhost:8000
 ```
 
-### Environment Configuration
+### Production Deployment
 
 ```bash
-# Optional: Set environment variables
-export SECRET_KEY="your-secret-key"
-export ENVIRONMENT="production"
+# Deploy to Fly.io (recommended)
+flyctl launch --copy-config --name aiarchetypes-acceleratinghumans
+flyctl volumes create quiz_data --size 1gb
+flyctl deploy
 
-# For future OAuth features
-export GOOGLE_CLIENT_ID="your-oauth-client-id"
-export GOOGLE_CLIENT_SECRET="your-oauth-secret"
+# Custom domain setup
+flyctl certs create aiarchetypes.acceleratinghumans.com
 ```
 
-## 📁 Project Structure
+## API Endpoints
 
-```
-ai-archetype-quiz/
-├── main.py                 # FastAPI application with embedded quiz logic
-├── requirements.txt        # Python dependencies
-├── fly.toml               # Fly.io deployment configuration
-├── Dockerfile             # Container configuration
-├── data/                  # Database storage (auto-created)
-│   └── quiz.db           # SQLite database with analytics
-├── static/               # Static assets
-│   ├── app.js           # Quiz frontend logic
-│   ├── style.css        # Modern CSS with design system
-│   └── images/          # Icons and graphics
-├── templates/            # Jinja2 templates
-│   ├── index.html       # Main quiz interface
-│   ├── results.html     # Shareable results page
-│   └── summary.html     # Public statistics dashboard
-├── deploy/               # Deployment scripts
-│   └── deploy.sh        # Production deployment automation
-└── .github/workflows/    # GitHub Actions CI/CD
-    └── fly-deploy.yml   # Automated deployment
-```
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/` | GET | Main quiz interface |
+| `/api/submit` | POST | Submit quiz responses |
+| `/api/analytics` | POST | Log user interactions |
+| `/api/stats` | GET | Public analytics data |
+| `/results/{session_id}` | GET | Shareable results page |
+| `/summary` | GET | Public statistics dashboard |
+| `/references` | GET | Research citations |
+| `/health` | GET | System health check |
 
-## 💾 Database Schema
+## Data Storage
 
-### Results Table
-```sql
-CREATE TABLE results (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    session_id TEXT UNIQUE NOT NULL,
-    primary_archetype TEXT NOT NULL,
-    archetype_name TEXT NOT NULL,
-    all_scores TEXT NOT NULL,           -- JSON: detailed scoring
-    responses TEXT NOT NULL,            -- JSON: user responses
-    role_demographic TEXT,              -- User role category
-    completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    completion_time REAL,              -- Duration in minutes
-    user_agent TEXT,                   -- Browser info
-    ip_address TEXT                    -- Geographic analysis
-);
-```
+### Database Schema
 
-### Analytics Table
-```sql
-CREATE TABLE analytics (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    event_type TEXT NOT NULL,          -- quiz_started, question_answered, etc.
-    session_id TEXT,                   -- Links to results
-    event_data TEXT,                   -- JSON: event details
-    ip_address TEXT,
-    user_agent TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
+**Results Table:**
+- `session_id`: Unique identifier for each quiz completion
+- `primary_archetype`: Main archetype classification
+- `secondary_archetype`: Secondary influence (if significant)
+- `all_scores`: JSON with complete scoring breakdown
+- `responses`: User's question responses
+- `role_demographic`: Professional role category
+- `completion_time`: Time to complete (minutes)
 
-## 🎯 Use Cases & Applications
+**Analytics Table:**
+- `event_type`: User interaction category
+- `session_id`: Link to quiz session
+- `event_data`: Interaction details
+- `created_at`: Timestamp
 
-### For Organizations
-- **Team Assessment**: Understand your team's AI adoption readiness and resistance patterns
-- **Change Management**: Design AI rollouts that account for different personality types
-- **Training & Development**: Create targeted learning experiences based on archetypes
-- **Strategic Planning**: Make informed decisions about AI implementation timelines
+### Privacy & Data Handling
+- **No email collection** - anonymous by design
+- **Minimal tracking** - only quiz interactions
+- **User-controlled sharing** - opt-in shareable links
+- **GDPR-friendly** - no personal identification
 
-### For Researchers & Academics
-- **Behavioral Studies**: Anonymous aggregate data on workplace AI attitudes
-- **Longitudinal Research**: Track changing perceptions over time
-- **Cross-Industry Analysis**: Compare AI readiness across sectors
-- **Publication-Ready Data**: Exportable datasets for academic research
+## Research Foundation
 
-### For Content Creators & Podcasters
-- **Audience Insights**: Deep understanding of listener AI perspectives
-- **Content Strategy**: Episode planning based on archetype distribution
-- **Community Building**: Foster discussions around AI workplace personalities
-- **Lead Generation**: High-value content that captures audience engagement
+Built on established academic research:
 
-### For Consultants & Coaches
-- **Client Assessment**: Rapid evaluation of organizational AI readiness
-- **Workshop Design**: Customized training based on team composition
-- **Change Strategy**: Data-driven approach to AI adoption planning
-- **Progress Tracking**: Measure attitude shifts over time
+- **Technology Adoption**: Rogers' Diffusion of Innovations, UTAUT-2
+- **Behavioral Science**: Psychological factors in AI attitudes
+- **Organizational Change**: Digital transformation frameworks
 
-## 🔧 Customization & Extension
+See `/references` for complete academic citations.
 
-### Adding New Questions
-Update the quiz data structure in `main.py`:
+## Development
 
-```python
-"questions": [
-    {
-        "id": 11,
-        "question": "Your custom question text?",
-        "type": "standard",  # or "demographic" 
-        "answers": {
-            "A": "Scholar-oriented response",
-            "B": "Strategist-oriented response",
-            "C": "Humanist-oriented response",
-            # ... map to appropriate archetypes
-        },
-        "scoring": {
-            "A": "Scholar",
-            "B": "Strategist", 
-            "C": "Humanist",
-            # ... archetype mappings
-        }
-    }
-]
-```
+### Architecture
+- **Backend**: FastAPI (Python 3.8+)
+- **Database**: SQLite with automatic migrations
+- **Frontend**: Vanilla JS with modern CSS
+- **Visualization**: HTML5 Canvas with high-DPI support
 
-### Modifying Archetypes
-Extend archetype definitions:
+### Key Components
+- `main.py`: Complete application (all routes, logic, HTML)
+- `data/quiz.db`: SQLite database (auto-created)
+- Embedded quiz data (no external JSON files)
 
-```python
-"archetypes": {
-    "Scholar": {
-        "name": "The Scholar",
-        "description": "Your updated description",
-        "characteristics": ["Updated trait 1", "Updated trait 2"],
-        "approach": "How to work with this archetype",
-        "risks": "Potential challenges to watch",
-        "icon": "📚",
-        "color": "#4ECDC4"
-    }
-}
-```
+### Scoring Algorithm
+- **Professional weighting**: First choice = 3 points, additional choices = 1 point
+- **Position-independent**: Answer order doesn't affect results
+- **Secondary detection**: Within 3 points and minimum 4 total points
+- **11-archetype coverage**: Comprehensive workplace AI personality mapping
 
-### Custom Styling
-The application uses a CSS design system in `/static/style.css`:
+## Usage Analytics
 
-```css
-:root {
-    --color-primary: #667eea;
-    --color-secondary: #f0f3ff;
-    --radius-base: 8px;
-    /* Customize design tokens */
-}
-```
+Track key metrics:
+- **Completion rate**: Quiz start to finish conversion
+- **Archetype distribution**: Popular personality types
+- **Role insights**: Patterns by professional position
+- **Geographic trends**: Regional AI adoption attitudes
 
-### Analytics Integration
-Add your preferred analytics platform:
+## Contributing
 
-```html
-<!-- In templates/index.html -->
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+1. **Fork** the repository
+2. **Create** feature branch (`git checkout -b feature/enhancement`)
+3. **Test** locally with `python main.py`
+4. **Commit** changes (`git commit -am 'Add enhancement'`)
+5. **Push** to branch (`git push origin feature/enhancement`)
+6. **Create** Pull Request
 
-<!-- Plausible Analytics -->
-<script defer data-domain="yourdomain.com" src="https://plausible.io/js/script.js"></script>
-```
+## Citation
 
-## 📊 Monitoring & Operations
+When referencing this quiz in academic work:
 
-### Health Monitoring
-```bash
-# Check application health
-curl https://your-app.fly.dev/health
+> Carroll, R. (2025). AI Archetype Quiz: Understanding Workplace AI Adoption Patterns Through Behavioral Archetypes. Accelerating Humans. Available at: https://aiarchetypes.acceleratinghumans.com
 
-# Monitor real-time logs
-flyctl logs --app your-app-name
+## License
 
-# SSH into container
-flyctl ssh console --app your-app-name
+MIT License - see [LICENSE](LICENSE) file for details.
 
-# Check database
-sqlite3 /app/data/quiz.db "SELECT COUNT(*) FROM results;"
-```
+## Contact
 
-### Performance Optimization
-- **Database**: Regular VACUUM operations, query optimization
-- **Caching**: Static asset caching, API response caching
-- **Scaling**: Horizontal scaling with Fly.io load balancing
-- **Monitoring**: Custom metrics for quiz completion rates
-
-### Backup & Recovery
-```bash
-# Backup database
-flyctl ssh console --app your-app-name
-sqlite3 /app/data/quiz.db ".backup backup.db"
-
-# Download backup
-flyctl ssh sftp get /app/data/backup.db ./local-backup.db
-```
-
-## 🤝 Contributing
-
-We welcome contributions to improve the AI Archetype Quiz:
-
-### Development Setup
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes with tests
-4. Commit your changes (`git commit -m 'Add amazing feature'`)
-5. Push to the branch (`git push origin feature/amazing-feature`)
-6. Open a Pull Request
-
-### Code Quality
-- Follow PEP 8 Python style guidelines
-- Add type hints for new functions
-- Include docstrings for public methods
-- Test your changes thoroughly
-
-### Areas for Contribution
-- **New Archetypes**: Research-backed personality types
-- **Analytics Features**: Advanced reporting and insights
-- **Accessibility**: Enhanced screen reader support
-- **Internationalization**: Multi-language support
-- **Performance**: Database optimization, caching improvements
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- **Research Foundation**: Built on technology adoption research by Rogers, Venkatesh (UTAUT), and behavioral science literature
-- **Design Inspiration**: Modern web standards and accessibility best practices
-- **Community**: The Accelerating Humans podcast community for insights and feedback
-- **Infrastructure**: Fly.io for reliable, global edge deployment
-
-## 📞 Support & Contact
-
-### For Technical Issues
-- **GitHub Issues**: [Report bugs or request features](https://github.com/yourusername/ai-archetype-quiz/issues)
-- **Documentation**: Check this README and inline code comments
-- **Health Check**: Monitor `/health` endpoint for system status
-
-### For Research & Collaboration
-- **Email**: [bert@acceleratinghumans.com](mailto:bert@acceleratinghumans.com)
-- **Podcast**: [Accelerating Humans](https://acceleratinghumans.com)
-- **Data Requests**: Contact for research partnerships
-
-### For Business Use
-- **Licensing**: MIT license allows commercial use
-- **Customization**: Available for organizational implementations
-- **Training**: Workshop and training opportunities
+**Created by**: Bert Carroll  
+**Podcast**: [Accelerating Humans](https://acceleratinghumans.com)  
+**Purpose**: Navigate AI transformation with clarity and confidence
 
 ---
 
-**Built with ❤️ for understanding human-AI collaboration in the workplace**
-
-*Helping organizations navigate AI transformation through behavioral insights and data-driven strategies.*
+*Version 1.0 - First production release*
