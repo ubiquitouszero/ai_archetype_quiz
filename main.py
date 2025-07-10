@@ -621,7 +621,7 @@ async def home(request: Request):
             }}
             
             .container {{
-                max-width: 800px;
+                max-width: 900px;
                 margin: 0 auto;
                 padding: 20px;
                 min-height: 100vh;
@@ -636,7 +636,7 @@ async def home(request: Request):
                 box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
                 padding: 40px;
                 width: 100%;
-                max-width: 700px;
+                max-width: 800px;
                 animation: slideIn 0.4s ease-out;
             }}
             
@@ -834,6 +834,7 @@ async def home(request: Request):
                 padding: 0.5rem 0;
                 position: relative;
                 padding-left: 2rem;
+                text-align: left;
             }}
             
             .characteristics li:before {{
@@ -880,6 +881,122 @@ async def home(request: Request):
                 margin-bottom: 0.5rem;
             }}
             
+            /* Enhanced Radar Chart Container */
+            .radar-chart-container {{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 2rem 0;
+                padding: 1rem;
+                background: #f8f9fa;
+                border-radius: 12px;
+                border: 1px solid #e9ecef;
+            }}
+
+            #radar-chart {{
+                max-width: 100%;
+                height: auto;
+                filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+            }}
+
+            /* Archetype Preview Cards */
+            .archetypes-grid {{
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 1.5rem;
+                margin-top: 1.5rem;
+            }}
+
+            .archetype-preview-card {{
+                background: white;
+                border: 1px solid #e9ecef;
+                border-radius: 12px;
+                padding: 1.5rem;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+                text-align: left;
+            }}
+
+            .archetype-preview-card:hover {{
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            }}
+
+            .archetype-header {{
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                margin-bottom: 1rem;
+            }}
+
+            .archetype-name-card {{
+                color: #2c3e50;
+                font-size: 1.25rem;
+                font-weight: 600;
+                margin: 0;
+            }}
+
+            .archetype-description {{
+                color: #666;
+                margin-bottom: 1.5rem;
+                line-height: 1.5;
+            }}
+
+            .archetype-characteristics {{
+                margin-bottom: 1.5rem;
+            }}
+
+            .archetype-characteristics h4 {{
+                color: #333;
+                font-size: 1rem;
+                font-weight: 600;
+                margin-bottom: 0.75rem;
+            }}
+
+            .archetype-characteristics ul {{
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }}
+
+            .archetype-characteristics li {{
+                position: relative;
+                padding-left: 1.5rem;
+                margin-bottom: 0.5rem;
+                color: #666;
+                line-height: 1.4;
+                text-align: left;
+            }}
+
+            .archetype-characteristics li::before {{
+                content: "•";
+                position: absolute;
+                left: 0;
+                color: #667eea;
+                font-weight: bold;
+                font-size: 1.2rem;
+            }}
+
+            .archetype-approach {{
+                background: #f0f3ff;
+                border-radius: 8px;
+                padding: 1rem;
+                margin-top: 1rem;
+            }}
+
+            .archetype-approach h4 {{
+                color: #667eea;
+                font-size: 0.9rem;
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+            }}
+
+            .archetype-approach p {{
+                color: #5a6c7d;
+                font-size: 0.85rem;
+                margin: 0;
+                line-height: 1.4;
+            }}
+            
             @media (max-width: 768px) {{
                 .container {{
                     padding: 10px;
@@ -899,6 +1016,31 @@ async def home(request: Request):
                 
                 .info-grid {{
                     grid-template-columns: repeat(2, 1fr);
+                }}
+
+                .archetypes-grid {{
+                    grid-template-columns: 1fr;
+                    gap: 1rem;
+                }}
+                
+                .archetype-preview-card {{
+                    padding: 1rem;
+                }}
+
+                .radar-chart-container {{
+                    padding: 0.5rem;
+                }}
+                
+                #radar-chart {{
+                    width: 100%;
+                    max-width: 350px;
+                }}
+            }}
+
+            @media (min-width: 769px) {{
+                #radar-chart {{
+                    width: 500px;
+                    height: 500px;
                 }}
             }}
         </style>
@@ -920,24 +1062,6 @@ async def home(request: Request):
                         <p style="margin-bottom: 1.5rem;">People respond to AI according to deep-seated values, motivations, and practical needs. Some see adventure and opportunity. Others see risk and disruption. Most see a complex mix of both.</p>
                         <p style="margin-bottom: 2rem;">Your archetype reveals your natural approach to AI adoption—and more importantly, how to work effectively with people who see things differently. In times of rapid change, this understanding becomes essential for both individual success and organizational harmony.</p>
                         
-                        <div class="benefits-grid">
-                            <div class="benefit-item">
-                                <div class="benefit-icon">🧭</div>
-                                <h3>Navigate Change</h3>
-                                <p>Understand your instinctive response to AI and make decisions that align with your values</p>
-                            </div>
-                            <div class="benefit-item">
-                                <div class="benefit-icon">🤝</div>
-                                <h3>Bridge Differences</h3>
-                                <p>Collaborate more effectively with colleagues who have different AI perspectives</p>
-                            </div>
-                            <div class="benefit-item">
-                                <div class="benefit-icon">🎯</div>
-                                <h3>Lead with Insight</h3>
-                                <p>Anticipate resistance, build better teams, and guide successful AI implementations</p>
-                            </div>
-                        </div>
-                        
                         <div style="background: #f0f3ff; padding: 1.5rem; border-radius: 12px; margin: 2rem 0; border-left: 4px solid #667eea;">
                             <p style="margin: 0; font-style: italic; color: #333;">
                                 <strong>Research-Based:</strong> This framework draws from leading research in technology adoption (Rogers, UTAUT), behavioral science, and digital transformation literature. It's designed as both a diagnostic tool for self-understanding and a practical guide for better collaboration.
@@ -957,24 +1081,25 @@ async def home(request: Request):
                             <span id="archetypes-toggle-icon" style="margin-left: 8px;">▼</span>
                         </button>
                         <div id="archetypes-preview" class="hidden" style="margin-top: 2rem; padding: 2rem; background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: left;">
-                            <h3 style="text-align: center; margin-bottom: 1rem; color: #667eea;">The AI Workplace Archetypes</h3>
+                            <h3 style="text-align: center; margin-bottom: 1rem; color: #667eea;">The 11 AI Workplace Archetypes</h3>
                             <p style="text-align: center; margin-bottom: 2rem; color: #666;">From The Innovator who sees adventure to The Guardian who prioritizes safety—each archetype brings essential perspectives to AI adoption.</p>
-                            <div class="archetypes-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                            <div class="archetypes-grid">
                                 {"".join(f'''
-                                <div class="archetype-preview-card" style="padding: 1.5rem; border: 1px solid #e9ecef; border-radius: 8px; border-left: 4px solid {archetype['color']};">
-                                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                <div class="archetype-preview-card" style="border-left: 4px solid {archetype['color']};">
+                                    <div class="archetype-header">
                                         <span style="font-size: 2rem;">{archetype['icon']}</span>
-                                        <h4 style="margin: 0; color: {archetype['color']};">{archetype['name']}</h4>
+                                        <h4 class="archetype-name-card">{archetype['name']}</h4>
                                     </div>
-                                    <p style="margin-bottom: 1rem; color: #666;">{archetype['description']}</p>
-                                    <div style="margin-bottom: 1rem;">
-                                        <strong style="color: #333;">Key Traits:</strong>
-                                        <ul style="margin: 0.5rem 0 0 1rem; color: #666;">
-                                            {"".join(f"<li>{trait}</li>" for trait in archetype['characteristics'][:2])}
+                                    <p class="archetype-description">{archetype['description']}</p>
+                                    <div class="archetype-characteristics">
+                                        <h4>Key Characteristics:</h4>
+                                        <ul>
+                                            {"".join(f"<li>{trait}</li>" for trait in archetype['characteristics'])}
                                         </ul>
                                     </div>
-                                    <div style="background: #f8f9fa; padding: 1rem; border-radius: 6px; font-size: 0.9rem;">
-                                        <strong>Approach:</strong> {archetype['approach'][:100]}...
+                                    <div class="archetype-approach">
+                                        <h4>How to work with them:</h4>
+                                        <p>{archetype['approach']}</p>
                                     </div>
                                 </div>
                                 ''' for name, archetype in QUIZ_DATA['archetypes'].items())}
@@ -983,7 +1108,8 @@ async def home(request: Request):
                     </div>
                     
                     <div style="text-align: center; margin-top: 2rem;">
-                        <a href="/summary" style="color: #667eea; text-decoration: none;">View Summary Statistics</a>
+                        <a href="/summary" style="color: #667eea; text-decoration: none; margin-right: 2rem;">View Summary Statistics</a>
+                        <a href="/references" style="color: #667eea; text-decoration: none;">📚 Research References</a>
                     </div>
                 </div>
                 
@@ -1016,10 +1142,9 @@ async def home(request: Request):
                         </div>
                         <p id="result-description" style="font-size: 1.1rem; margin-bottom: 2rem;"></p>
                         
-                        <!-- Radar Chart -->
-                        <div style="text-align: center; margin: 2rem 0;">
-                            <h3 style="margin-bottom: 1rem;">Your Archetype Profile</h3>
-                            <canvas id="radar-chart" width="400" height="400" style="max-width: 100%; height: auto;"></canvas>
+                        <!-- Enhanced Radar Chart -->
+                        <div class="radar-chart-container">
+                            <canvas id="radar-chart" width="500" height="500"></canvas>
                         </div>
                         
                         <div class="characteristics">
@@ -1047,40 +1172,6 @@ async def home(request: Request):
                             <p id="result-risks"></p>
                         </div>
                         
-                        <!-- All Archetypes Reference -->
-                        <div style="margin: 2rem 0;">
-                            <button onclick="toggleAllArchetypes()" style="background: none; border: 2px solid #667eea; color: #667eea; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; width: 100%;">
-                                <span id="all-archetypes-toggle-text">Compare with All 11 Archetypes</span>
-                                <span id="all-archetypes-toggle-icon" style="margin-left: 8px;">▼</span>
-                            </button>
-                            <div id="all-archetypes" class="hidden" style="margin-top: 2rem; padding: 2rem; background: #f8f9fa; border-radius: 12px;">
-                                <h3 style="text-align: center; margin-bottom: 1rem; color: #667eea;">All 11 AI Workplace Archetypes</h3>
-                                <p style="text-align: center; margin-bottom: 2rem; color: #666; font-style: italic;">
-                                    Framework based on technology adoption research (Rogers, UTAUT), behavioral science, and digital transformation literature.
-                                </p>
-                                <div class="archetypes-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
-                                    {"".join(f'''
-                                    <div class="archetype-preview-card" style="padding: 1.5rem; background: white; border-radius: 8px; border-left: 4px solid {archetype['color']}; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                                            <span style="font-size: 2rem;">{archetype['icon']}</span>
-                                            <h4 style="margin: 0; color: {archetype['color']};">{archetype['name']}</h4>
-                                        </div>
-                                        <p style="margin-bottom: 1rem; color: #666;">{archetype['description']}</p>
-                                        <div style="margin-bottom: 1rem;">
-                                            <strong style="color: #333;">Key Traits:</strong>
-                                            <ul style="margin: 0.5rem 0 0 1rem; color: #666; font-size: 0.9rem;">
-                                                {"".join(f"<li>{trait}</li>" for trait in archetype['characteristics'])}
-                                            </ul>
-                                        </div>
-                                        <div style="background: #f8f9fa; padding: 1rem; border-radius: 6px; font-size: 0.9rem;">
-                                            <strong>How they work:</strong> {archetype['approach']}
-                                        </div>
-                                    </div>
-                                    ''' for name, archetype in QUIZ_DATA['archetypes'].items())}
-                                </div>
-                            </div>
-                        </div>
-                        
                         <div id="share-section" class="hidden">
                             <h4 style="margin-bottom: 1rem;">Share your results:</h4>
                             <div class="share-link" id="share-url"></div>
@@ -1089,6 +1180,10 @@ async def home(request: Request):
                         <div class="nav-buttons" style="justify-content: center;">
                             <button class="btn btn-secondary" onclick="restartQuiz()">Take Again</button>
                             <button class="btn" onclick="shareResults()">Get Share Link</button>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 2rem;">
+                            <a href="/references" style="color: #667eea; text-decoration: none;">📚 View Research References</a>
                         </div>
                     </div>
                 </div>
@@ -1138,7 +1233,7 @@ async def home(request: Request):
                 
                 // Add instructions for multi-choice (skip demographic question)
                 if (currentQuestion > 0) {{
-                    html += `<div class="question-instructions">
+                    html += `<div class="question-instructions" style="text-align: center; margin-bottom: 1.5rem; color: #666; font-size: 0.9rem;">
                         Click up to 3 options that resonate with you. Your first choice counts most.
                     </div>`;
                 }}
@@ -1182,7 +1277,7 @@ async def home(request: Request):
                     if (isSelected) {{
                         const badgeNumber = selectionIndex + 1;
                         const badgeType = selectionIndex === 0 ? 'primary' : selectionIndex === 1 ? 'secondary' : 'tertiary';
-                        html += `<div class="selection-badge selection-badge--${{badgeType}}">${{badgeNumber}}</div>`;
+                        html += `<div class="selection-badge selection-badge--${{badgeType}}" style="position: absolute; top: 10px; right: 10px; background: white; color: #667eea; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem;">${{badgeNumber}}</div>`;
                     }}
                     
                     html += `</div>`;
@@ -1271,6 +1366,7 @@ async def home(request: Request):
                 const badge = document.createElement('div');
                 badge.className = `selection-badge selection-badge--${{type}}`;
                 badge.textContent = number;
+                badge.style.cssText = 'position: absolute; top: 10px; right: 10px; background: white; color: #667eea; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem;';
                 element.appendChild(badge);
             }}
             
@@ -1376,7 +1472,7 @@ async def home(request: Request):
                         charList.appendChild(li);
                     }});
                     
-                    // Create radar chart
+                    // Create enhanced radar chart
                     createRadarChart(result.scores);
                     
                     // Log completion
@@ -1396,37 +1492,61 @@ async def home(request: Request):
             
             function createRadarChart(scores) {{
                 const canvas = document.getElementById('radar-chart');
+                if (!canvas) return;
+                
                 const ctx = canvas.getContext('2d');
-                const centerX = canvas.width / 2;
-                const centerY = canvas.height / 2;
-                const radius = Math.min(centerX, centerY) - 60;
+                
+                // Responsive sizing
+                const containerWidth = canvas.parentElement.offsetWidth;
+                const size = Math.min(containerWidth - 40, 500); // Max 500px, responsive
+                canvas.width = size;
+                canvas.height = size;
+                
+                const centerX = size / 2;
+                const centerY = size / 2;
+                const radius = Math.min(centerX, centerY) - 80; // More padding for labels
                 
                 // Clear canvas
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.clearRect(0, 0, size, size);
                 
-                // Archetype names and colors
+                // Get archetype data
                 const archetypes = Object.keys(quizData.archetypes);
                 const colors = Object.values(quizData.archetypes).map(a => a.color);
                 const maxScore = Math.max(...Object.values(scores)) || 1;
                 
-                // Draw background grid
-                ctx.strokeStyle = '#e9ecef';
+                // Enhanced styling
+                ctx.lineJoin = 'round';
+                ctx.lineCap = 'round';
+                
+                // Draw background grid circles
+                ctx.strokeStyle = '#e5e7eb';
                 ctx.lineWidth = 1;
+                ctx.setLineDash([]);
+                
                 for (let i = 1; i <= 5; i++) {{
+                    const gridRadius = (radius * i) / 5;
                     ctx.beginPath();
-                    ctx.arc(centerX, centerY, (radius * i) / 5, 0, 2 * Math.PI);
+                    ctx.arc(centerX, centerY, gridRadius, 0, 2 * Math.PI);
                     ctx.stroke();
+                    
+                    // Add value labels on grid lines
+                    if (i > 0) {{
+                        ctx.fillStyle = '#9ca3af';
+                        ctx.font = '11px Inter, sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.fillText((i * 2).toString(), centerX + gridRadius - 15, centerY - 5);
+                    }}
                 }}
                 
                 // Draw axes and labels
-                ctx.strokeStyle = '#e9ecef';
-                ctx.fillStyle = '#666';
-                ctx.font = '12px Arial';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
+                ctx.strokeStyle = '#d1d5db';
+                ctx.lineWidth = 1;
+                
+                const angleStep = (2 * Math.PI) / archetypes.length;
+                const dataPoints = [];
                 
                 archetypes.forEach((archetype, i) => {{
-                    const angle = (i * 2 * Math.PI) / archetypes.length - Math.PI / 2;
+                    const angle = i * angleStep - Math.PI / 2; // Start from top
                     const x = centerX + Math.cos(angle) * radius;
                     const y = centerY + Math.sin(angle) * radius;
                     
@@ -1436,63 +1556,99 @@ async def home(request: Request):
                     ctx.lineTo(x, y);
                     ctx.stroke();
                     
-                    // Draw label
-                    const labelX = centerX + Math.cos(angle) * (radius + 30);
-                    const labelY = centerY + Math.sin(angle) * (radius + 30);
+                    // Calculate data point position
+                    const score = scores[archetype] || 0;
+                    const normalizedScore = (score / 10) * radius; // Scores are 0-10
+                    const dataX = centerX + Math.cos(angle) * normalizedScore;
+                    const dataY = centerY + Math.sin(angle) * normalizedScore;
+                    
+                    dataPoints.push({{ x: dataX, y: dataY, score, archetype, angle }});
+                    
+                    // Draw archetype labels
+                    const labelDistance = radius + 35;
+                    const labelX = centerX + Math.cos(angle) * labelDistance;
+                    const labelY = centerY + Math.sin(angle) * labelDistance;
+                    
                     const archetypeData = quizData.archetypes[archetype];
                     
-                    ctx.fillStyle = colors[i] || '#667eea';
-                    ctx.font = 'bold 11px Arial';
-                    ctx.fillText(archetypeData.name, labelX, labelY - 8);
+                    // Icon
                     ctx.font = '20px Arial';
-                    ctx.fillText(archetypeData.icon, labelX, labelY + 12);
-                }});
-                
-                // Draw data polygon
-                ctx.beginPath();
-                ctx.strokeStyle = '#667eea';
-                ctx.fillStyle = 'rgba(102, 126, 234, 0.2)';
-                ctx.lineWidth = 3;
-                
-                archetypes.forEach((archetype, i) => {{
-                    const score = scores[archetype] || 0;
-                    const normalizedScore = (score / maxScore) * radius;
-                    const angle = (i * 2 * Math.PI) / archetypes.length - Math.PI / 2;
-                    const x = centerX + Math.cos(angle) * normalizedScore;
-                    const y = centerY + Math.sin(angle) * normalizedScore;
-                    
-                    if (i === 0) {{
-                        ctx.moveTo(x, y);
-                    }} else {{
-                        ctx.lineTo(x, y);
-                    }}
-                    
-                    // Draw score points
-                    ctx.save();
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
                     ctx.fillStyle = colors[i] || '#667eea';
-                    ctx.beginPath();
-                    ctx.arc(x, y, 4, 0, 2 * Math.PI);
-                    ctx.fill();
-                    ctx.restore();
-                }});
-                
-                ctx.closePath();
-                ctx.fill();
-                ctx.stroke();
-                
-                // Add score values
-                ctx.fillStyle = '#333';
-                ctx.font = 'bold 10px Arial';
-                archetypes.forEach((archetype, i) => {{
-                    const score = scores[archetype] || 0;
-                    if (score > 0) {{
-                        const normalizedScore = (score / maxScore) * radius;
-                        const angle = (i * 2 * Math.PI) / archetypes.length - Math.PI / 2;
-                        const x = centerX + Math.cos(angle) * (normalizedScore + 15);
-                        const y = centerY + Math.sin(angle) * (normalizedScore + 15);
-                        ctx.fillText(score.toString(), x, y);
+                    ctx.fillText(archetypeData.icon, labelX, labelY - 12);
+                    
+                    // Name
+                    ctx.font = 'bold 11px Inter, sans-serif';
+                    ctx.fillStyle = '#374151';
+                    ctx.fillText(archetypeData.name, labelX, labelY + 8);
+                    
+                    // Score (if significant)
+                    if (score >= 1) {{
+                        ctx.font = '10px Inter, sans-serif';
+                        ctx.fillStyle = '#6b7280';
+                        ctx.fillText(score.toString(), labelX, labelY + 20);
                     }}
                 }});
+                
+                // Draw filled area
+                if (dataPoints.length > 0) {{
+                    ctx.beginPath();
+                    ctx.moveTo(dataPoints[0].x, dataPoints[0].y);
+                    
+                    for (let i = 1; i < dataPoints.length; i++) {{
+                        ctx.lineTo(dataPoints[i].x, dataPoints[i].y);
+                    }}
+                    ctx.closePath();
+                    
+                    // Fill with gradient
+                    const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius);
+                    gradient.addColorStop(0, 'rgba(102, 126, 234, 0.3)');
+                    gradient.addColorStop(1, 'rgba(102, 126, 234, 0.1)');
+                    
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+                    
+                    // Stroke the outline
+                    ctx.strokeStyle = '#667eea';
+                    ctx.lineWidth = 3;
+                    ctx.setLineDash([]);
+                    ctx.stroke();
+                }}
+                
+                // Draw data points
+                dataPoints.forEach((point, i) => {{
+                    if (point.score >= 0.5) {{ // Only show meaningful scores
+                        // Outer glow
+                        ctx.beginPath();
+                        ctx.arc(point.x, point.y, 8, 0, 2 * Math.PI);
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                        ctx.fill();
+                        
+                        // Main point
+                        ctx.beginPath();
+                        ctx.arc(point.x, point.y, 5, 0, 2 * Math.PI);
+                        ctx.fillStyle = colors[i] || '#667eea';
+                        ctx.fill();
+                        
+                        // Border
+                        ctx.strokeStyle = '#ffffff';
+                        ctx.lineWidth = 2;
+                        ctx.stroke();
+                    }}
+                }});
+                
+                // Add center point
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, 3, 0, 2 * Math.PI);
+                ctx.fillStyle = '#9ca3af';
+                ctx.fill();
+                
+                // Add title
+                ctx.font = 'bold 14px Inter, sans-serif';
+                ctx.fillStyle = '#1f2937';
+                ctx.textAlign = 'center';
+                ctx.fillText('Your Archetype Profile', centerX, 20);
             }}
             
             function toggleArchetypes() {{
@@ -1507,22 +1663,6 @@ async def home(request: Request):
                 }} else {{
                     preview.classList.add('hidden');
                     toggleText.textContent = 'Meet the AI Archetypes';
-                    toggleIcon.textContent = '▼';
-                }}
-            }}
-            
-            function toggleAllArchetypes() {{
-                const allArchetypes = document.getElementById('all-archetypes');
-                const toggleText = document.getElementById('all-archetypes-toggle-text');
-                const toggleIcon = document.getElementById('all-archetypes-toggle-icon');
-                
-                if (allArchetypes.classList.contains('hidden')) {{
-                    allArchetypes.classList.remove('hidden');
-                    toggleText.textContent = 'Hide Archetype Comparison';
-                    toggleIcon.textContent = '▲';
-                }} else {{
-                    allArchetypes.classList.add('hidden');
-                    toggleText.textContent = 'Compare with All 11 Archetypes';
                     toggleIcon.textContent = '▼';
                 }}
             }}
@@ -1588,6 +1728,252 @@ async def home(request: Request):
                 }}
             }}
         </script>
+    </body>
+    </html>
+    """)
+
+@app.get("/references", response_class=HTMLResponse)
+async def references_page():
+    """Research references page"""
+    return HTMLResponse("""
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Research References - AI Archetype Quiz</title>
+        <meta name="description" content="Academic research and literature that supports the AI Archetype Quiz framework, including technology adoption models and behavioral insights.">
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+                margin: 0;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
+                padding: 20px;
+                line-height: 1.6;
+            }
+            
+            .references-container {
+                max-width: 800px;
+                margin: 0 auto;
+                background: white;
+                border-radius: 16px;
+                padding: 40px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            }
+            
+            .references-header {
+                text-align: center;
+                margin-bottom: 3rem;
+                padding: 2rem;
+                background: #f8f9fa;
+                border-radius: 12px;
+                border: 1px solid #e9ecef;
+            }
+            
+            .references-category {
+                margin-bottom: 3rem;
+            }
+            
+            .references-category h2 {
+                color: #667eea;
+                border-bottom: 2px solid #667eea;
+                padding-bottom: 0.5rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .reference-item {
+                background: #f8f9fa;
+                border: 1px solid #e9ecef;
+                border-radius: 8px;
+                padding: 1.5rem;
+                margin-bottom: 1rem;
+                transition: box-shadow 0.2s ease;
+            }
+            
+            .reference-item:hover {
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            }
+            
+            .reference-text {
+                color: #2c3e50;
+                margin-bottom: 0.5rem;
+                text-align: left;
+            }
+            
+            .reference-text a {
+                color: #667eea;
+                text-decoration: none;
+                word-break: break-all;
+            }
+            
+            .reference-text a:hover {
+                text-decoration: underline;
+            }
+            
+            .framework-note {
+                background: #f0f3ff;
+                border: 1px solid #667eea;
+                border-radius: 8px;
+                padding: 1.5rem;
+                margin: 2rem 0;
+            }
+            
+            .framework-note h3 {
+                color: #667eea;
+                margin-bottom: 1rem;
+            }
+            
+            .back-nav {
+                text-align: center;
+                margin: 2rem 0;
+            }
+            
+            .btn {
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                color: white;
+                padding: 12px 24px;
+                border-radius: 8px;
+                text-decoration: none;
+                font-weight: 600;
+                margin: 0 0.5rem;
+                display: inline-block;
+            }
+            
+            .btn-secondary {
+                background: #6c757d;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="references-container">
+            <div class="references-header">
+                <h1>Research References</h1>
+                <p>The AI Archetype Quiz framework is built on established academic research in technology adoption, behavioral science, and organizational change management.</p>
+            </div>
+
+            <div class="framework-note">
+                <h3>Framework Foundation</h3>
+                <p>Our archetype framework synthesizes insights from diffusion of innovations theory, the Unified Theory of Acceptance and Use of Technology (UTAUT), and behavioral research on AI adoption patterns. The quiz identifies personality-driven approaches to workplace AI implementation based on validated psychological and organizational behavior models.</p>
+            </div>
+
+            <div class="references-category">
+                <h2>Technology Adoption & Innovation Models</h2>
+                
+                <div class="reference-item">
+                    <div class="reference-text">
+                        Lampo, A. (2022). How is technology accepted? Fundamental works in user technology acceptance from diffusion of innovations to UTAUT-2. In <em>Proceedings of the 8th International Conference on Industrial and Business Engineering</em> (pp. 260–266). ACM. <a href="https://doi.org/10.1145/3568834.3568903" target="_blank" rel="noopener">https://doi.org/10.1145/3568834.3568903</a>
+                    </div>
+                </div>
+
+                <div class="reference-item">
+                    <div class="reference-text">
+                        Diffusion of innovations. (n.d.). <em>Wikipedia</em>. <a href="https://en.wikipedia.org/wiki/Diffusion_of_innovations" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Diffusion_of_innovations</a>
+                    </div>
+                </div>
+
+                <div class="reference-item">
+                    <div class="reference-text">
+                        Technology adoption life cycle. (n.d.). <em>Wikipedia</em>. <a href="https://en.wikipedia.org/wiki/Technology_adoption_life_cycle" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Technology_adoption_life_cycle</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="references-category">
+                <h2>Ethics, Risk, and Organizational Change</h2>
+                
+                <div class="reference-item">
+                    <div class="reference-text">
+                        Ajmani, L. H., Abdelkadir, N. A., & Chancellor, S. (2025, June 23–26). Secondary stakeholders in AI: Fighting for, brokering, and navigating agency. In <em>FAccT '25: Proceedings of the 2025 ACM Conference on Fairness, Accountability, and Transparency</em> (pp. TBD). ACM. <a href="https://doi.org/10.1145/3715275.3732071" target="_blank" rel="noopener">https://doi.org/10.1145/3715275.3732071</a>
+                    </div>
+                </div>
+
+                <div class="reference-item">
+                    <div class="reference-text">
+                        Bird, E., Fox-Skelly, J., Jenner, N., Larbey, R., Weitkamp, E., & Winfield, A. (2020). <em>The ethics of artificial intelligence: Issues and initiatives</em>. European Parliamentary Research Service. <a href="https://www.europarl.europa.eu/RegData/etudes/STUD/2020/634452/EPRS_STU(2020)634452_EN.pdf" target="_blank" rel="noopener">https://www.europarl.europa.eu/RegData/etudes/STUD/2020/634452/EPRS_STU(2020)634452_EN.pdf</a>
+                    </div>
+                </div>
+
+                <div class="reference-item">
+                    <div class="reference-text">
+                        Golgeci, I., Ritala, P., Arslan, A., McKenna, B., & Ali, I. (2025). Confronting and alleviating AI resistance in the workplace: An integrative review and a process framework. <em>Human Resource Management Review, 35</em>, 101075. <a href="https://doi.org/10.1016/j.hrmr.2024.101075" target="_blank" rel="noopener">https://doi.org/10.1016/j.hrmr.2024.101075</a>
+                    </div>
+                </div>
+
+                <div class="reference-item">
+                    <div class="reference-text">
+                        Iyer, V., Manshad, M., & Brannon, D. (2024). A value-based approach to AI ethics: Accountability, transparency, explainability, and usability. <em>Redalyc</em>. <a href="http://dx.doi.org/10.32870/myn.vi54.7815" target="_blank" rel="noopener">http://dx.doi.org/10.32870/myn.vi54.7815</a>
+                    </div>
+                </div>
+
+                <div class="reference-item">
+                    <div class="reference-text">
+                        Shekar, K., Shreya, S., Rizvi, K., Galindo, L., Nugteren, M., & Arora, R. (n.d.). <em>Stakeholder engagement for responsible AI</em>. Meta Open Loop. <a href="https://openloop.org/reports/2024/09/india-report-stakeholder-engagement-for-responsible-ai.pdf" target="_blank" rel="noopener">https://openloop.org/reports/2024/09/india-report-stakeholder-engagement-for-responsible-ai.pdf</a>
+                    </div>
+                </div>
+
+                <div class="reference-item">
+                    <div class="reference-text">
+                        Stoeva, R., & Kostadinova, I. (2023). Change management in the implementation of AI technology: Organizational aspects. In <em>6th International Conference on Advanced Research in Management, Business and Finance</em>, Amsterdam, Netherlands. <a href="http://dx.doi.org/10.33422/6th.icmbf.2023.06.107" target="_blank" rel="noopener">http://dx.doi.org/10.33422/6th.icmbf.2023.06.107</a>
+                    </div>
+                </div>
+
+                <div class="reference-item">
+                    <div class="reference-text">
+                        Tjondronegoro, D. (n.d.). <em>TOAST framework: A multidimensional approach to ethical and sustainable AI integration in organizations</em>. <a href="https://arxiv.org/pdf/2502.00011" target="_blank" rel="noopener">https://arxiv.org/pdf/2502.00011</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="references-category">
+                <h2>Psychological & Behavioral Insights</h2>
+                
+                <div class="reference-item">
+                    <div class="reference-text">
+                        Brooks, C., & Williams, L. (2021). The impact of personality traits on attitude to financial risk. <em>Research in International Business and Finance, 58</em>, 101501. <a href="https://doi.org/10.1016/j.ribaf.2021.101501" target="_blank" rel="noopener">https://doi.org/10.1016/j.ribaf.2021.101501</a>
+                    </div>
+                </div>
+
+                <div class="reference-item">
+                    <div class="reference-text">
+                        De Freitas, J., Agarwal, S., Schmitt, B., & Haslam, N. (2023). Psychological factors underlying attitudes toward AI tools. <em>Nature Human Behaviour</em>. <a href="https://doi.org/10.1038/s41562-023-01734-2" target="_blank" rel="noopener">https://doi.org/10.1038/s41562-023-01734-2</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="references-category">
+                <h2>Education, Perception & Workforce</h2>
+                
+                <div class="reference-item">
+                    <div class="reference-text">
+                        <strong>Defining the archetypes | Workforce, training and education – Digital Transformation.</strong> (n.d.). <em>Building a digital workforce: Developing healthcare workers' confidence in AI</em> (Chapter 2: Workforce archetypes). Health Education England. <a href="https://digital-transformation.hee.nhs.uk/building-a-digital-workforce/dart-ed/horizon-scanning/developing-healthcare-workers-confidence-in-ai/chapter-2-workforce-archetypes/defining-the-archetypes" target="_blank" rel="noopener">https://digital-transformation.hee.nhs.uk/building-a-digital-workforce/dart-ed/horizon-scanning/developing-healthcare-workers-confidence-in-ai/chapter-2-workforce-archetypes/defining-the-archetypes</a>
+                    </div>
+                </div>
+
+                <div class="reference-item">
+                    <div class="reference-text">
+                        Examining factors of student AI adoption through the value-based adoption model. (2024). <em>Issues in Information Systems, 25</em>(3), 218–230. <a href="https://doi.org/10.48009/3_iis_2024_117" target="_blank" rel="noopener">https://doi.org/10.48009/3_iis_2024_117</a>
+                    </div>
+                </div>
+
+                <div class="reference-item">
+                    <div class="reference-text">
+                        AI governance in 2025: Expert predictions on ethics, tech, and law. (n.d.). <em>Forbes</em>. <a href="https://www.forbes.com/sites/dianaspehar/2025/01/09/ai-governance-in-2025--expert-predictions-on-ethics-tech-and-law/" target="_blank" rel="noopener">https://www.forbes.com/sites/dianaspehar/2025/01/09/ai-governance-in-2025--expert-predictions-on-ethics-tech-and-law/</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="framework-note">
+                <h3>Citation & Use</h3>
+                <p>When referencing the AI Archetype Quiz in academic work, please cite as:</p>
+                <p><em>AI Archetype Quiz: Understanding Workplace AI Adoption Patterns Through Behavioral Archetypes. Accelerating Humans. Available at: [your-domain.com]</em></p>
+            </div>
+
+            <div class="back-nav">
+                <a href="/" class="btn">← Back to Quiz</a>
+                <a href="/summary" class="btn btn-secondary">View Results</a>
+            </div>
+        </div>
     </body>
     </html>
     """)
@@ -1744,6 +2130,7 @@ async def get_results(session_id: str):
                     padding: 0.5rem 0;
                     position: relative;
                     padding-left: 2rem;
+                    text-align: left;
                 }}
                 .characteristics li:before {{
                     content: "✓";
@@ -1811,6 +2198,8 @@ async def get_results(session_id: str):
                 
                 <div class="research-note">
                     <strong>Research-Based Framework:</strong> This archetype assessment draws from leading research in technology adoption, behavioral science, and digital transformation literature.
+                    <br><br>
+                    <a href="/references" style="color: #667eea; text-decoration: none;">📚 View Research References</a>
                 </div>
                 
                 <div style="border-top: 1px solid #eee; padding-top: 2rem; margin-top: 2rem;">
@@ -2017,7 +2406,8 @@ async def summary_page():
                     
                     <div style="text-align: center; border-top: 1px solid #eee; padding-top: 2rem;">
                         <p style="color: #666;">From the Accelerating Humans Podcast</p>
-                        <a href="/" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">Take the Quiz</a>
+                        <a href="/" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; margin-right: 1rem;">Take the Quiz</a>
+                        <a href="/references" style="background: #6c757d; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">📚 References</a>
                     </div>
                 </div>
             </div>
