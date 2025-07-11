@@ -2480,7 +2480,7 @@ async def summary_page():
                     
                     <div style="text-align: center; border-top: 1px solid #eee; padding-top: 2rem;">
                         <p style="color: #666;">From the Accelerating Humans Podcast</p>
-                        <a href="/" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; margin-right: 1rem;">Take the Quiz</a>
+                        <a href="https://acceleratinghumans.com/" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; margin-right: 1rem;">Take the Quiz</a>
                         <a href="/references" style="background: #6c757d; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">📚 References</a>
                     </div>
                 </div>
