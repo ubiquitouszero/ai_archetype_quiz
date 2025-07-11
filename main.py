@@ -1076,7 +1076,9 @@ async def home(request: Request):
                     <h1>AI Archetype Quiz</h1>
                     <p class="subtitle">Navigate the AI transformation with clarity and confidence</p>
                     <div style="text-align: center;">
-                        <span class="badge">From the Accelerating Humans Podcast</span>
+                        <a href="https://acceleratinghumans.com/" style="text-decoration: none;">
+                            <span class="badge">From the Accelerating Humans Podcast</span>
+                        </a>
                     </div>
                     <p style="margin-bottom: 2rem; font-size: 1.1rem; line-height: 1.6;">We're living through a paradigm shift. AI is reshaping how we work, but the biggest challenge isn't technological—it's human. Understanding your AI archetype helps you navigate this transformation with purpose, reduce conflict with colleagues, and make decisions that align with your values.</p>
                     
@@ -2480,7 +2482,7 @@ async def summary_page():
                     
                     <div style="text-align: center; border-top: 1px solid #eee; padding-top: 2rem;">
                         <p style="color: #666;">From the Accelerating Humans Podcast</p>
-                        <a href="https://acceleratinghumans.com/" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; margin-right: 1rem;">Take the Quiz</a>
+                        <a href="/" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; margin-right: 1rem;">Take the Quiz</a>
                         <a href="/references" style="background: #6c757d; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">📚 References</a>
                     </div>
                 </div>
